@@ -2,7 +2,7 @@
 
 #### ICP_KITTI ########
 
-# Automated indexing of graph nodes
+# Automated indexing of graph nodes  - done on 05/14/2023
 # Try different clustering parameters
 # Try ICP with only points from clustering
 # Try ICP with points (downsampled, ground filtered and projected to xy-plane)

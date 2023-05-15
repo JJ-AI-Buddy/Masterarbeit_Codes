@@ -80,12 +80,14 @@ def DBSCAN_clustering(pc,eps,min_points):
     
     np_clust_centers = np.zeros((max_label+1,3))
     clust_bboxes = []
+    num_points = []
     
     np_pc = np.asarray(pc.points)
     np_pc_clust = np.insert(np_pc,0,labels,1)
     
     for lb in range(0,max_label+1):
         np_obj = np_pc_clust[np_pc_clust[:,0] == lb]
+        num_points.append(len(np_obj))
         # center x
         np_clust_centers [lb][0] = np_obj[:,1].mean()
         # center y
@@ -93,11 +95,13 @@ def DBSCAN_clustering(pc,eps,min_points):
         # center z
         np_clust_centers [lb][2] = np_obj[:,3].mean()
         
+        
         obj = o3d.geometry.PointCloud()
         obj.points = o3d.utility.Vector3dVector(np_obj[:,1::])
         obj_bbox = obj.get_axis_aligned_bounding_box()
         obj_bbox.color=(0,0,0)
         clust_bboxes.append(obj_bbox)
+    
         
     pc_clusters = o3d.geometry.PointCloud()
     pc_clusters.points = o3d.utility.Vector3dVector(np_clust_centers)
@@ -105,8 +109,48 @@ def DBSCAN_clustering(pc,eps,min_points):
     
     # return point cloud containing all the centroids of the clusters in blue
     # return list of bboxes of all clusters in black
-    return pc_clusters, clust_bboxes
+    return pc_clusters, clust_bboxes, num_points
 
+def create_oriented_graph (pc_nodes, color):
+    
+    ##### Create graph with points from clustererd pc
+    lineset = o3d.geometry.LineSet()
+
+    # Sort point clouds by x-value from lowest to highest
+    arr_points = np.asarray(pc_nodes.points)
+    arr_points = arr_points[arr_points[:, 1].argsort()]
+
+    #Set indices so that already ordered graph nodes are connected
+    arr_indices = np.zeros((len(arr_points)-1,2))
+    j = 0 
+    k = 1 
+    for row in arr_indices:
+        row [0] = j 
+        row [1] = k 
+        j += 1 
+        k += 1
+    
+    # Set color of graph in RGB
+    arr_colors = np.zeros((len(arr_indices),3))
+    for i in range(0,len(arr_colors)):
+        arr_colors [i] = color
+
+    lineset.points = o3d.utility.Vector3dVector(arr_points)
+    lineset.lines = o3d.utility.Vector2iVector(arr_indices)
+    lineset.colors = o3d.utility.Vector3dVector(arr_colors)  
+    
+    return lineset
+
+def project2xy (pc_points):
+    np_points = np.asarray(pc_points.points)
+    np_points = np.around(np_points,2)
+    np_points[:,2] = 0 
+    np_points =  np.unique(np_points, axis=0)
+
+    pc_points_xy = o3d.geometry.PointCloud()
+    pc_points_xy.points = o3d.utility.Vector3dVector(np_points)
+    
+    return pc_points_xy
     
 ############### SETTINGS ###################################################################################
 timestamp_src = 1
@@ -148,8 +192,7 @@ source_pc = detect_ground_thres(source_pc, 2.0, -0.95,0.95)
 target_pc = detect_ground_thres (target_pc, 2.0, -0.95, 0.95)
 
 # Cropping of the target pc with a bounding box which represents the overlapping area of both PCs
-
-target_pc = crop_pc_bbox(target_pc, (-50,-50,-50),(-10,50,50))
+#target_pc = crop_pc_bbox(target_pc, (-50,-50,-50),(-10,50,50))
 
 # Initial pose guess: Initial transform matrix
 transform_matrix = np.asarray([[1.0, 0.0, 0.0, 5], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]])
@@ -163,41 +206,61 @@ target_pc.paint_uniform_color([0, 1, 0.5])
 origin = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.5)
 
 # Clustering
-pc_clust, bboxes_3D = DBSCAN_clustering(source_pc,5,10)
+pc_clust_src, bboxes_src, num_points_src = DBSCAN_clustering(source_pc,5,10)
+pc_clust_trg, bboxes_trg, num_points_trg = DBSCAN_clustering(target_pc,5,10)
+
+
+# Cropping of the target pc with a bounding box which represents the overlapping area of both PCs
+pc_clust_trg = crop_pc_bbox(pc_clust_trg, (-50,-50,-50),(-10,50,50))
 
 # Project points to xy-plane
-np_clust_xy = np.asarray(source_pc.points)
-np_clust_xy = np.around(np_clust_xy,2)
-np_clust_xy[:,2] = 0 
-np_clust_xy =  np.unique(np_clust_xy, axis=0)
+#pc_clust_xy_src = project2xy(pc_clust_src)
+#pc_clust_xy_trg = project2xy(pc_clust_trg)
 
-pc_clust_xy = o3d.geometry.PointCloud()
-pc_clust_xy.points = o3d.utility.Vector3dVector(np_clust_xy)
-
-pc_clust_xy, bboxes_2D = DBSCAN_clustering(pc_clust_xy,5,10)
-pc_clust_xy.paint_uniform_color([1, 0, 0])
-
+# Color the graph nodes
+pc_clust_src.paint_uniform_color([1, 0, 0])  # RED
+pc_clust_trg.paint_uniform_color([0,0,1])   # BLUE
 
 ##### Create graph with points from clustererd pc
-lineset = o3d.geometry.LineSet()
+lineset_src = create_oriented_graph(pc_clust_src, [1, 0, 0])
+lineset_trg = create_oriented_graph(pc_clust_trg, [0, 0, 1])
 
-# Sort point clouds by x-value from lowest to highest
-arr = np.asarray(pc_clust.points)
-arr = arr[arr[:, 0].argsort()]
-
-lineset.points = o3d.utility.Vector3dVector(arr)
-
-# Matrix with indices also must be created automatically!!!!
-lineset.lines = o3d.utility.Vector2iVector([[0, 1],
-                                           [1, 2],
-                                           [2, 3],
-                                           [3, 4],
-                                           [4,5],
-                                           [5,6],
-                                           [6,7],
-                                           [7,8]])
-
-
+lineset_src.lines = o3d.utility.Vector2iVector([[0,1],
+                                                [0,2],
+                                                [0,3],
+                                                [0,4],
+                                                [0,5],
+                                                [0,6],
+                                                [0,7],
+                                                [0,8],
+                                                [1,2],
+                                                [1,3],
+                                                [1,4],
+                                                [1,5],
+                                                [1,6],
+                                                [1,7],
+                                                [1,8],
+                                                [2,3],
+                                                [2,4],
+                                                [2,5],
+                                                [2,6],
+                                                [2,7],
+                                                [2,8],
+                                                [3,4],
+                                                [3,5],
+                                                [3,6],
+                                                [3,7],
+                                                [3,8],
+                                                [4,5],
+                                                [4,6],
+                                                [4,7],
+                                                [4,8],
+                                                [5,6],
+                                                [5,7],
+                                                [5,8],
+                                                [6,7],
+                                                [6,8],
+                                                [7,8]])
 
 visualizer_list = bboxes_3D
 visualizer_list.append(origin)
@@ -205,7 +268,7 @@ visualizer_list.append(source_pc)
 visualizer_list.append(pc_clust)
 visualizer_list.append(lineset)
 
-o3d.visualization.draw_geometries(visualizer_list,
+o3d.visualization.draw_geometries([lineset_src],
                                  zoom=0.7, front=[0, 0, 1],
                                  lookat=[0, 0, 0],
                                  up=[0, 1, 0],
@@ -229,8 +292,6 @@ print(transform)
 with open(path_txt, 'a') as f:
     f.write('Transformation matrix:\n%s ' %str(transform) + "\n\n")    
     
-
-
 
 ##### Polygon volume
 
