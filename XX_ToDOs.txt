@@ -7,4 +7,9 @@
 # Try ICP with only points from clustering
 # Try ICP with points (downsampled, ground filtered and projected to xy-plane)
 
-# Weighted graph edges (relation of points in connected clusters)
+# Weighted graph edges (relation of points in connected clusters) - done on 05/15/2023 - issues with using tensors (gpu/cuda) and visualizing the graphs
+
+
+
+# Try to get ICP algorithm code from KISS-ICP
+# Start with NDT and DL methods

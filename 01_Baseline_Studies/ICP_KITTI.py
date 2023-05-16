@@ -141,6 +141,51 @@ def create_oriented_graph (pc_nodes, color):
     
     return lineset
 
+def create_weighted_oriented_graph (pc_nodes, cluster_sizes):
+    
+    dtype_f = o3d.core.float32
+    dtype_i = o3d.core.int32
+
+    #device = o3d.core.Device("CUDA:0")
+
+    lineset = o3d.t.geometry.LineSet()
+    lineset = lineset.cuda(0)
+    color_pos = [0,1,0] #Green when positive weight values
+    color_neg = [1,0,0] #Red when negative weight values
+
+    # Sort point clouds by y-value from lowest to highest
+    arr_points = np.asarray(pc_nodes.points)
+    arr_points = np.insert(arr_points,3,cluster_sizes,1)
+    arr_points = arr_points[arr_points[:, 1].argsort()]
+
+    #Set indices so that already ordered graph nodes are connected
+    arr_indices = np.zeros((len(arr_points)-1,2))
+    arr_weights = np.zeros((len(arr_points)-1,1))
+    j = 0 
+    k = 1 
+    for row in arr_indices:
+       row [0] = j 
+       row [1] = k 
+       arr_weights [j,0]= arr_points[k,3] / arr_points[j,3]
+       j += 1 
+       k += 1
+        
+    # Set color of graph in RGB
+    arr_colors = np.zeros((len(arr_indices),3))
+    for i in range(0,len(arr_colors)):
+        if arr_weights [i,0] >= 0:
+            arr_colors [i] = color_pos
+        else: arr_colors[i] = color_neg
+
+            
+    lineset.point.positions = o3d.cpu.pybind.core.Tensor(arr_points[:,::2], dtype_f)
+    lineset.line.indices = o3d.core.Tensor(arr_indices, dtype_i)
+    lineset.line.colors = o3d.core.Tensor(arr_colors, dtype_f)
+    lineset.line.features = o3d.core.Tensor(arr_weights, dtype_f)
+    
+    return lineset
+
+
 def project2xy (pc_points):
     np_points = np.asarray(pc_points.points)
     np_points = np.around(np_points,2)
@@ -171,14 +216,16 @@ path_txt = os.path.join(path_to_file, name_txt)
 # Load point clouds as PCD object
 pc_1 = KITTI_Bin2PCD(path_src)
 pc_2 = KITTI_Bin2PCD(path_trg)
-
+pc_1.to_cuda
 source_pc = copy.deepcopy(pc_1)
 target_pc = copy.deepcopy(pc_2)
+source_pc.cuda(1)
 
 
 # Voxel based downsampling of the PCs
 source_pc = downsampling_pc(source_pc,0.5)
 target_pc = downsampling_pc(target_pc,0.5)
+
 
 # Statistical outlier removal (alternative: Radial outlier removal)
 cl_src, ind_src = source_pc.remove_statistical_outlier(nb_neighbors=10,std_ratio=2.5)
@@ -187,12 +234,13 @@ cl_trg, ind_trg = target_pc.remove_statistical_outlier(10,2.5)
 source_pc = cl_src.select_by_index(ind_src)
 target_pc = cl_trg.select_by_index(ind_trg)
 
+
 # Remove ground points from both PCs
 source_pc = detect_ground_thres(source_pc, 2.0, -0.95,0.95)
 target_pc = detect_ground_thres (target_pc, 2.0, -0.95, 0.95)
 
 # Cropping of the target pc with a bounding box which represents the overlapping area of both PCs
-#target_pc = crop_pc_bbox(target_pc, (-50,-50,-50),(-10,50,50))
+target_pc = crop_pc_bbox(target_pc, (-50,-50,-50),(-10,50,50))
 
 # Initial pose guess: Initial transform matrix
 transform_matrix = np.asarray([[1.0, 0.0, 0.0, 5], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]])
@@ -213,6 +261,7 @@ pc_clust_trg, bboxes_trg, num_points_trg = DBSCAN_clustering(target_pc,5,10)
 # Cropping of the target pc with a bounding box which represents the overlapping area of both PCs
 pc_clust_trg = crop_pc_bbox(pc_clust_trg, (-50,-50,-50),(-10,50,50))
 
+pc_clust_src = pc_clust_src.transform(transform_matrix)
 # Project points to xy-plane
 #pc_clust_xy_src = project2xy(pc_clust_src)
 #pc_clust_xy_trg = project2xy(pc_clust_trg)
@@ -225,7 +274,6 @@ pc_clust_trg.paint_uniform_color([0,0,1])   # BLUE
 lineset_src = create_oriented_graph(pc_clust_src, [1, 0, 0])
 lineset_trg = create_oriented_graph(pc_clust_trg, [0, 0, 1])
 
-lineset_src.lines = o3d.utility.Vector2iVector([[0,1],
                                                 [0,2],
                                                 [0,3],
                                                 [0,4],
@@ -261,19 +309,25 @@ lineset_src.lines = o3d.utility.Vector2iVector([[0,1],
                                                 [6,7],
                                                 [6,8],
                                                 [7,8]])
+#### Create a weighted graph with points from clustered pc
+lineset_wg_src = create_weighted_oriented_graph(pc_clust_src, num_points_src)
+lineset_wg_trg = create_weighted_oriented_graph(pc_clust_trg, num_points_trg)
 
-visualizer_list = bboxes_3D
+
+visualizer_list = bboxes_src
 visualizer_list.append(origin)
-visualizer_list.append(source_pc)
-visualizer_list.append(pc_clust)
-visualizer_list.append(lineset)
+visualizer_list.append(target_pc)
+visualizer_list.append(pc_clust_src)
+visualizer_list.append(lineset_src)
 
-o3d.visualization.draw_geometries([lineset_src],
+o3d.visualization.draw_geometries([lineset_wg_src],
                                  zoom=0.7, front=[0, 0, 1],
                                  lookat=[0, 0, 0],
                                  up=[0, 1, 0],
                                  point_show_normal=False)
 
+
+o3d.visualization.draw([lineset_wg_src])
 ################### MAIN #######################################
 
 with open(path_txt, 'w') as f:
