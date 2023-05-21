@@ -1,4 +1,4 @@
-05/13/2023
+05/21/2023
 
 #### ICP_KITTI ########
 
@@ -13,3 +13,5 @@
 
 # Try to get ICP algorithm code from KISS-ICP
 # Start with NDT and DL methods
+
+# Added functions for creating random noisy or missing points in source or target pc (more realistic) - done on 05/21/2023

@@ -196,6 +196,81 @@ def project2xy (pc_points):
     pc_points_xy.points = o3d.utility.Vector3dVector(np_points)
     
     return pc_points_xy
+
+
+def random_noise_equal_dist (pc, maxb, minb, count):
+    # adds random 'count' points to the pc as noise
+    # maxb and minb describe the volume
+    # maxb: numpy array (1,3) with maximal values for x, y and z
+    # minb: numpy array (1,3) with minimal values for x, y and z
+    
+    ### Hint: Equally distributed points as noise over the whole pc volume maybe not wished
+    ### Solution: Specify a specific rectangular volume where you want to add noise
+
+    arr_rand_points = np.zeros((count,3))
+
+    for row in arr_rand_points:
+        for i in range(0,3):
+            row [i] = np.random.rand()*(maxb[i] - minb[i]) + minb[i]
+
+    arr_new_pc = np.insert(np.asarray(pc.points),-1,arr_rand_points,0) 
+    new_pc = o3d.geometry.PointCloud()
+    new_pc.points = o3d.utility.Vector3dVector(arr_new_pc)
+    new_pc.paint_uniform_color([1,0,0]) # RED
+    
+    # color the added points differently
+    for row in np.asarray(new_pc.colors)[- count :, :]:
+        row [0] = 0
+        row [1] = 0 
+        row [2] = 1
+        
+        # BLUE
+    
+    return new_pc
+
+def random_noise_to_points (pc,count, deviation):
+    
+    arr_pc = np.asarray(pc.points)
+    arr_noisy_points = np.zeros((count,3))
+    new_row = np.zeros((1,3))
+    
+    for i in range(0,count):
+        idx = np.random.randint(len(arr_pc)+1)
+        row = arr_pc[idx,:]
+        for j in range(0,3):
+            new_row [0,j] = row [j] + np.random.rand()*(deviation + deviation) - deviation
+        
+        arr_noisy_points [i,:] = new_row[0]
+
+    arr_new_pc = np.insert(np.asarray(pc.points),-1,arr_noisy_points,0) 
+    new_pc = o3d.geometry.PointCloud()
+    new_pc.points = o3d.utility.Vector3dVector(arr_new_pc)
+    new_pc.paint_uniform_color([1,0,0]) # RED
+    
+    # color the added points differently
+    for row_c in np.asarray(new_pc.colors)[- count :, :]:
+        row_c [0] = 0
+        row_c [1] = 0 
+        row_c [2] = 1
+        
+        # BLUE
+    
+    return new_pc
+
+def random_del_points (pc,count):
+    
+    arr_pc = np.asarray(pc.points)
+    for i in range(0,count):
+        idx = np.random.randint(len(arr_pc)+1)
+        
+        arr_pc = np.delete(arr_pc,idx,0)
+    
+    new_pc = o3d.geometry.PointCloud()
+    new_pc.points = o3d.utility.Vector3dVector(arr_pc)
+    new_pc.paint_uniform_color([1,0,0]) # RED    
+    
+    return new_pc
+        
     
 ############### SETTINGS ###################################################################################
 timestamp_src = 1
@@ -216,20 +291,29 @@ path_txt = os.path.join(path_to_file, name_txt)
 # Load point clouds as PCD object
 pc_1 = KITTI_Bin2PCD(path_src)
 pc_2 = KITTI_Bin2PCD(path_trg)
-pc_1.to_cuda
+#pc_1.to_cuda
 source_pc = copy.deepcopy(pc_1)
 target_pc = copy.deepcopy(pc_2)
-source_pc.cuda(1)
+#source_pc.cuda(1)
 
+#bbox_test = source_pc.get_axis_aligned_bounding_box()
+#bbox_test.color = (1, 0, 0)
+
+#max_pc = source_pc.get_max_bound()
+#min_pc = source_pc.get_min_bound()
+
+# Add random noise to the target pc or points missing
+#source_pc_new = random_noise_equal_dist (source_pc, [0,50,0], [-50,-20, -3], 200)
+target_pc = random_noise_to_points (source_pc,1000, 0.5)
+target_pc = random_del_points(target_pc,500)
 
 # Voxel based downsampling of the PCs
 source_pc = downsampling_pc(source_pc,0.5)
 target_pc = downsampling_pc(target_pc,0.5)
 
-
 # Statistical outlier removal (alternative: Radial outlier removal)
 cl_src, ind_src = source_pc.remove_statistical_outlier(nb_neighbors=10,std_ratio=2.5)
-cl_trg, ind_trg = target_pc.remove_statistical_outlier(10,2.5)
+cl_trg, ind_trg = target_pc.remove_statistical_outlier(10,1.3)
 
 source_pc = cl_src.select_by_index(ind_src)
 target_pc = cl_trg.select_by_index(ind_trg)
@@ -243,7 +327,7 @@ target_pc = detect_ground_thres (target_pc, 2.0, -0.95, 0.95)
 target_pc = crop_pc_bbox(target_pc, (-50,-50,-50),(-10,50,50))
 
 # Initial pose guess: Initial transform matrix
-transform_matrix = np.asarray([[1.0, 0.0, 0.0, 5], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]])
+transform_matrix = np.asarray([[1.0, 0.0, 0.0, 1], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]])
 source_pc = source_pc.transform(transform_matrix)
 
 # Paint the PCs in distinctive colors
@@ -320,7 +404,7 @@ visualizer_list.append(target_pc)
 visualizer_list.append(pc_clust_src)
 visualizer_list.append(lineset_src)
 
-o3d.visualization.draw_geometries([lineset_wg_src],
+o3d.visualization.draw_geometries([pc_clust_src, pc_clust_trg, lineset_src, lineset_trg],
                                  zoom=0.7, front=[0, 0, 1],
                                  lookat=[0, 0, 0],
                                  up=[0, 1, 0],
