@@ -296,6 +296,65 @@ source_pc = copy.deepcopy(pc_1)
 target_pc = copy.deepcopy(pc_2)
 #source_pc.cuda(1)
 
+source_pc.paint_uniform_color([1, 0.0, 0.5])
+target_pc.paint_uniform_color([0, 1, 0.5])
+
+threshold = 0.05
+trans_offset = np.asarray([[1, 0, 0, 0.1],
+                         [0, 1, 0, 0.1],
+                         [0, 0, 1, 0],
+                         [0.0, 0.0, 0.0, 1.0]])
+
+source_pc.transform(trans_offset)
+
+o3d.visualization.draw_geometries([source_pc, target_pc],
+                                 zoom=0.7, front=[0, 0, 1],
+                                 lookat=[0, 0, 0],
+                                 up=[0, 1, 0],
+                                 point_show_normal=False)
+
+trans_init = np.asarray([[1, 0, 0, 0.0],
+                         [0, 1, 0, 0],
+                         [0, 0, 1, 0],
+                         [0.0, 0.0, 0.0, 1.0]])
+
+evaluation = o3d.pipelines.registration.evaluate_registration(
+    source_pc, target_pc, threshold, trans_init)
+print(evaluation)
+
+print("Apply point-to-point ICP")
+reg_p2p = o3d.pipelines.registration.registration_icp(
+    source_pc, target_pc, threshold, trans_init,
+    o3d.pipelines.registration.TransformationEstimationPointToPoint())
+print(reg_p2p)
+print("Transformation is:")
+print(reg_p2p.transformation)
+
+print("Apply point-to-plane ICP")
+reg_p2l = o3d.pipelines.registration.registration_icp(
+    source_pc, target_pc, threshold, trans_init,
+    o3d.pipelines.registration.TransformationEstimationPointToPlane())
+print(reg_p2l)
+print("Transformation is:")
+print(reg_p2l.transformation)
+
+source_pc.paint_uniform_color([1, 0.0, 0.5])
+target_pc.paint_uniform_color([0, 1, 0.5])
+
+o3d.visualization.draw_geometries([source_pc.transform(reg_p2p.transformation), target_pc],
+                                 zoom=0.7, front=[0, 0, 1],
+                                 lookat=[0, 0, 0],
+                                 up=[0, 1, 0],
+                                 point_show_normal=False)
+
+vector_1 = trans_offset [0:3, 3]
+print(vector_1)
+vector_2 = reg_p2p.transformation [0:3, 3]
+print(vector_2)
+
+transl_error = np.linalg.norm(vector_1 + vector_2)
+print(transl_error)
+
 #bbox_test = source_pc.get_axis_aligned_bounding_box()
 #bbox_test.color = (1, 0, 0)
 
