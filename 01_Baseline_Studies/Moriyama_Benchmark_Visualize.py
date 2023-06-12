@@ -12,6 +12,15 @@ import copy
 from scipy.spatial.transform import Rotation as R
 import time
 
+def save_view_point(pcd, filename):
+    vis = o3d.visualization.Visualizer()
+    vis.create_window()
+    vis.add_geometry(pcd)
+    vis.run()  # user changes the view and press "q" to terminate
+    param = vis.get_view_control().convert_to_pinhole_camera_parameters()
+    o3d.io.write_pinhole_camera_parameters(filename, param)
+    vis.destroy_window()
+
 path_map = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\Moriyama_Map.pcd"
 path_GT_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\14_Local_Pose.csv"
 path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation"
@@ -48,9 +57,9 @@ list_path_pc = [path_pc_1, path_pc_2, path_pc_3, path_pc_4, path_pc_5]
 pc_map = o3d.io.read_point_cloud(path_map)  #map point cloud
 target_pc = copy.deepcopy(pc_map)
 
-path_pc = list_path_pc[0]
-init_pose = arr_GT_poses[0]
-timestamp = timestamps[0]
+path_pc = list_path_pc[1]
+init_pose = arr_GT_poses[1]
+timestamp = timestamps[1]
 
 pc_scan = o3d.io.read_point_cloud(path_pc)  #online scan point cloud from above declared timestamp
 source_pc = copy.deepcopy(pc_scan)
@@ -75,9 +84,9 @@ transform_GT = np.vstack((tranform_raw,np.array([0,0,0,1]))) # 4x4 homography tr
 min_bound = np.zeros((3,1))
 max_bound = np.zeros((3,1))
 
-delta = np.array([[200],             # in x-direction +/- 200 m
-                  [200],             # in y-direction +/- 200 m
-                  [100]])            # in z-direction +/- 100 m
+delta = np.array([[60],             # in x-direction +/- 200 m
+                  [60],             # in y-direction +/- 200 m
+                  [10]])            # in z-direction +/- 100 m
 
 for i in range(0,len(t_vec)):
     min_bound[i,0]= t_vec[i,0] - delta[i,0]
@@ -90,7 +99,8 @@ target_pc = o3d.geometry.PointCloud.crop(target_pc,bbox)
 
 df = pd.read_csv(path_to_ITcsv, delimiter = ';', header = 0)
 
-df
+## Axis 0,1,2 are for translation
+## Axis 3,4,5 are for rotation
 
 timestamps = df.groupby(' Timestamp').groups.keys()
 axes = df.groupby(' Axis').groups.keys()
@@ -98,7 +108,37 @@ init_values = df.groupby(' Init Error (Trans or Rot)').groups.keys()
 
 timestamp_1 = list(timestamps)[0]
 axis_1 = list(axes)[0]
-init_value_1 = list(init_values) [0]
+init_value_1 = list(init_values) [5]
+
+### Initial transformation matrix
+transl_values = [0,0,0]
+rot_values = [0,0,0]
+
+if axis_1 == 0:
+    transl_values[0] = init_value_1
+elif axis_1 == 1:
+    transl_values[1] = init_value_1
+elif axis_1 == 2:
+    transl_values[2] = init_value_1
+elif axis_1 == 3:
+    rot_values [0] = init_value_1
+elif axis_1 == 4:
+    rot_values [1] = init_value_1
+elif axis_1 == 5:
+    rot_values[2] = init_value_1
+else: print ('Somethin went wrong! Please check.')
+
+transform_init = copy.deepcopy(transform_GT)
+R_Euler_init = copy.deepcopy(R_Euler)
+
+for i in range(0,3):
+    transform_init [i,3] = transform_init [i,3] + transl_values[i]
+    R_Euler_init[i] = R_Euler_init[i] + rot_values[i]
+
+r = R.from_euler('xyz',R_Euler_init)
+R_matrix_init = r.as_matrix()
+
+transform_init[0:3,0:3] = R_matrix_init
 
 
 df = df.loc[df[' Timestamp'] == timestamp_1]
@@ -110,11 +150,30 @@ print('Found %s iteration steps for\nTimestamp number 0, manipulated axis %s wit
 
 source_temp = copy.deepcopy(source_pc)
 
-
 vis = o3d.visualization.Visualizer()
 vis.create_window()
+ctr = vis.get_view_control()
+
 vis.add_geometry(source_temp, reset_bounding_box = True)
 vis.add_geometry(target_pc, reset_bounding_box = True)
+
+ctr.set_zoom(0.8)
+
+source_temp.transform(transform_init)
+
+vis.reset_view_point(True)
+vis.update_geometry(source_temp)
+vis.poll_events()
+vis.update_renderer()
+#vis.run()
+#vis.run()  # user changes the view and press "q" to terminate
+#param = vis.get_view_control().convert_to_pinhole_camera_parameters()
+#o3d.io.write_pinhole_camera_parameters('Test.json', param)
+#vis.destroy_window()
+
+
+transform_init_inv = np.linalg.inv(transform_init)
+source_temp.transform(transform_init_inv)
 
 t_matrix = np.zeros((4,4))
 t_matrix_inv = np.identity(4)
@@ -148,7 +207,7 @@ for i in range(0,len(df)):
     #vis.add_geometry(target_pc, reset_bounding_box = True)
     
     source_temp.transform(t_matrix_inv)
-    time.sleep(0.5)
+    time.sleep(0.1)
     source_temp.transform(t_matrix)
     vis.reset_view_point(True)
     time.sleep(0.5)
@@ -161,4 +220,5 @@ for i in range(0,len(df)):
     
     t_matrix_inv = np.linalg.inv(t_matrix)
 
-    
+vis.destroy_window() 
+o3d.utility.set_verbosity_level(o3d.utility.VerbosityLevel.Info)   
