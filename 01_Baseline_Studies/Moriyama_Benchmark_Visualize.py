@@ -27,6 +27,10 @@ path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_
 
 path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\B000_IterStepsBaselineICPMoriyama.csv"
 
+Idx_timestamp = 1 
+Idx_axis = 0  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
+Idx_init = 5  # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
+
 #Load GT poses from csv
 df_GT = pd.read_csv(path_GT_csv, delimiter = ',', header = 0)
 
@@ -57,9 +61,9 @@ list_path_pc = [path_pc_1, path_pc_2, path_pc_3, path_pc_4, path_pc_5]
 pc_map = o3d.io.read_point_cloud(path_map)  #map point cloud
 target_pc = copy.deepcopy(pc_map)
 
-path_pc = list_path_pc[1]
-init_pose = arr_GT_poses[1]
-timestamp = timestamps[1]
+path_pc = list_path_pc[Idx_timestamp]
+init_pose = arr_GT_poses[Idx_timestamp]
+timestamp = timestamps[Idx_timestamp]
 
 pc_scan = o3d.io.read_point_cloud(path_pc)  #online scan point cloud from above declared timestamp
 source_pc = copy.deepcopy(pc_scan)
@@ -106,9 +110,9 @@ timestamps = df.groupby(' Timestamp').groups.keys()
 axes = df.groupby(' Axis').groups.keys()
 init_values = df.groupby(' Init Error (Trans or Rot)').groups.keys()
 
-timestamp_1 = list(timestamps)[0]
-axis_1 = list(axes)[0]
-init_value_1 = list(init_values) [5]
+timestamp_1 = list(timestamps)[Idx_timestamp]
+axis_1 = list(axes)[Idx_axis]
+init_value_1 = list(init_values) [Idx_init]
 
 ### Initial transformation matrix
 transl_values = [0,0,0]
