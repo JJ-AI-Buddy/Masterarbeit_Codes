@@ -23,25 +23,72 @@ def draw_registration_result(source, target, transformation):
     o3d.visualization.draw(
         [source_temp.to_legacy(),
         target_temp.to_legacy()])
+
+def quat2transform (pose):
+    #pose N-tuple with 7 entries (x,y,z,orient x, orient y, orient z, orient w)
     
+    r = R.from_quat(pose[3:7])
+    R_matrix = r.as_matrix()
+    R_vec = r.as_rotvec()
+    R_Euler = r.as_euler('xyz')
+
+    t_vec = np.zeros((3,1))
+
+    for k in range(0,len(t_vec)):
+        t_vec[k] = pose[k]
+
+    tranform_raw = np.hstack((R_matrix, t_vec)) # 3x3 matrix for rotation and translation
+    transform = np.vstack((tranform_raw,np.array([0,0,0,1]))) # 4x4 homography transformation matrix
+    
+    return transform, R_Euler, R_vec, t_vec
+
+def evalMetrics (tf_GT, R_vec_GT, R_Euler_GT, tf):
+    ### Get relative translation error of predicted pose compared to GT - Euclidean distance (L2 norm)
+    l2 = np.sum(np.power((tf[:,3]-tf_GT[:,3]),2))
+    rse_transl = np.sqrt(l2)      #Euclidian distance between GT pose and estimated pose
+
+    ### Get relative rotation error of predicted rotation vector compared to GT rotation vector - Angle in deg between those vectors
+    final_rot_matrix = copy.deepcopy(tf [0:3,0:3])
+    r = R.from_matrix(final_rot_matrix)
+    R_vec_final = r.as_rotvec()
+
+    R_Euler_final = r.as_euler('xyz')
+
+
+    unit_vector_1 = R_vec_GT / np.linalg.norm(R_vec_GT)
+    unit_vector_2 = R_vec_final / np.linalg.norm(R_vec_final)
+    dot_product = np.dot(unit_vector_1, unit_vector_2)
+    angle = abs(np.arccos(dot_product))
+    rso_deg_1 = np.rad2deg(angle)
+
+    rso_deg_2 = abs(R_Euler_GT[2]-R_Euler_final[2]) * (180/np.pi)  # Error of the yaw angle in deg
+    #rso_deg_2 = np.rad2deg(np.arccos((np.trace(R_matrix * np.transpose(final_rot_matrix)) - 1)/2)) #from Literature
+    
+    return rse_transl, rso_deg_1, rso_deg_2
+   
 
 #############################################
 ##### SET INPUTS    
-bool_trans = False    # if True then bool_rot has to be False
-bool_rot = False      # if True then bool_trans has to be False
-bool_1D = False       #if True only one of the above also has to be true (ATTENTION! both at the same time cannot be true)
+bool_trans = False     # if True then bool_rot has to be False
+
+if bool_trans == False:
+    bool_rot = True      # if True then bool_trans has to be False
+else: bool_rot = False
+
+bool_1D = False      #if True only one of the above also has to be true (ATTENTION! both at the same time cannot be true)
 
 
-bool_2D = True          # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
+bool_2D = True         # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
 bool_2D_Yaw = False     # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
                         # The third entry encodes the rotation axis; if we want the yaw-angle (z-axis) we have to set the last entry to 5
 
-ID = 'B020'        # Set ID like specified in the documentation
+ID = 'C023'        # Set ID like specified in the documentation
 
 # ICP parameters
-max_correspondence_distance = 0.5   # max. distance between two points to be seen as correct correspondence (=: inlier)
+max_correspondence_distance = 0.1   # max. distance between two points to be seen as correct correspondence (=: inlier)
     
 estimation = o3d.t.pipelines.registration.TransformationEstimationPointToPoint()
+#estimation = o3d.t.pipelines.registration.TransformationEstimationPointToPlane()
    
 #Convergence criteria
 m_iters = 30
@@ -54,7 +101,7 @@ save_loss_log = True
 lower_limits = [-2,-2,-2,-np.pi/4,-np.pi/4,-np.pi/4]    #x,y,z, alpha, beta, gamma
 upper_limits = [2,2,2, np.pi/4,np.pi/4,np.pi/4]       #x,y,z, alpha, beta, gamma
 
-number_eval_points = [9,9,9,9,9,9]
+number_eval_points = [9,9,9,9,9,9]    #[17,17,17,17,17,17] for 1D, [9,9,9,9,9,9] for 2D
     
 axis2Deval = [0,1,5] 
 
@@ -68,18 +115,19 @@ dtype = o3d.core.float32
 # Input: Define the path direction of the map to use, the specific point cloud from a defined timestamp and the path direction to the csv file containing the GT poses (from NDT localization in Autoware) of the Localizer
 path_map = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\Moriyama_Map.pcd"
 path_GT_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\14_Local_Pose.csv"
+path_GNSS_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\13_GNSS_pose.csv"
 path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation"
 
-name_txt = str(ID) + '_CombXYBaselineICPMoriyama.txt'
+name_txt = str(ID) + '_TranslXYBaselineICPMoriyama.txt'
 path_txt = os.path.join(path_to_file, name_txt)
-name_csv = str(ID) + '_CombXYBaselineICPMoriyama.csv'
+name_csv = str(ID) + '_TranslXYBaselineICPMoriyama.csv'
 path_csv = os.path.join(path_to_file,name_csv)
 name_csv_iter = str(ID) + '_IterStepsBaselineICPMoriyama.csv'
 path_csv_iter = os.path.join(path_to_file, name_csv_iter)
 
 #Prepare CSV file
 with open(path_csv, 'w') as f:
-    f.write('ID; Timestamp GT Pose; Axis; Initial Transl x; Initial Transl y; Yaw angle; Initial fitness; Initial RMSE Inliers; Initial Inlier correspondences; Initial Transl. Error [m]; Initial Rot. Error 1 [°]; Initial Rot. Error 2 [°]; Fitness; RMSE Inliers; Inlier correspondences; Transl. Error [m]; Rot. Error 1 [°]; Rot. Error 2 [°]; Number Iterations; Execut. Time [s]\n')
+    f.write('ID;Timestamp GT Pose;Axis;Initial Transl x;Initial Transl y;Initial Transl z;Initial fitness;Initial RMSE Inliers;Initial Inlier correspondences;Initial Transl. Error [m];Initial Rot. Error 1 [°];Initial Rot. Error 2 [°];Fitness;RMSE Inliers;Inlier correspondences;Transl. Error [m];Rot. Error 1 [°];Rot. Error 2 [°];Number Iterations;Execut. Time [s];GNSS Transl. Error[m];GNSS Rot. Error 1 [°];GNSS Rot. Error 2 [°]\n')
 
 #Prepare txt file
 with open(path_txt, 'w') as f:
@@ -87,7 +135,7 @@ with open(path_txt, 'w') as f:
 
 #Prepare Iter step CSV file
 with open(path_csv_iter, 'w') as f:
-    f.write('ID; Timestamp; Axis; Init Error (Trans or Rot); Iteration Step Index; Fitness; Inlier RMSE [m]; t11; t12; t13; t14; t21; t22; t23; t24; t31; t32; t33; t34; t41; t42; t43; t44\n')
+    f.write('ID;Timestamp;Axis;Init Error (Trans or Rot);Iteration Step Index;Fitness;Inlier RMSE [m];t11;t12;t13;t14;t21;t22;t23;t24;t31;t32;t33;t34;t41;t42;t43;t44\n')
 
 
 #Load GT poses from csv
@@ -104,7 +152,18 @@ for j in range(0, len(arr_GT_poses)):
     arr_GT_poses[j,:] = np.asarray(df_GT.iloc[i, 4:11])
     timestamps.append(df_GT.iloc[i,2])
     i += sample_step
-    
+
+#Load GNSS poses from csv
+df_GNSS = pd.read_csv(path_GNSS_csv, delimiter = ',', header = 0)
+
+arr_GNSS_poses = np.zeros((5,7))
+i = 0
+for i in range(0, len(timestamps)):
+    df_new = df_GNSS ["%time"]
+    df_new = abs(df_new - timestamps[i])
+    #print(df_new.idxmin())
+    arr_GNSS_poses[i,:] = np.asarray(df_GNSS.iloc[df_new.idxmin(), 4:11])
+
     
 #Point Clouds
 path_map = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\Moriyama_Map.pcd"
@@ -119,18 +178,23 @@ list_path_pc = [path_pc_1, path_pc_2, path_pc_3, path_pc_4, path_pc_5]
 
 #Load map
 pc_map = o3d.t.io.read_point_cloud(path_map)  #map point cloud
+
+
 target_pc = copy.deepcopy(pc_map)
 
 path_pc = list_path_pc[0]
 init_pose = arr_GT_poses[0]
 timestamp = timestamps[0]
 
-list_inter_results = []
+#list_inter_results = []
+#x = 1 
+#x = 3
 
 for x in range(0,len(arr_GT_poses)):
 
     path_pc = list_path_pc[x]
     init_pose = arr_GT_poses[x]
+    GNSS_pose = arr_GNSS_poses[x]
     timestamp = timestamps[x]
     
     #Load online scans
@@ -148,19 +212,14 @@ for x in range(0,len(arr_GT_poses)):
     source_pc.point.colors = o3d.core.Tensor(scan_colors, dtype, device)
     
     #Define initial transformation matrix from GT pose in the map coordinate system
-
-    r = R.from_quat(init_pose[3:7])
-    R_matrix = r.as_matrix()
-    R_vec = r.as_rotvec()
-    R_Euler = r.as_euler('xyz')
-
-    t_vec = np.zeros((3,1))
-
-    for k in range(0,len(t_vec)):
-        t_vec[k] = init_pose[k]
-
-    tranform_raw = np.hstack((R_matrix, t_vec)) # 3x3 matrix for rotation and translation
-    transform_GT = np.vstack((tranform_raw,np.array([0,0,0,1]))) # 4x4 homography transformation matrix
+    transform_GT, R_Euler, R_vec, t_vec = quat2transform(init_pose)
+    
+    #Define GNSS transformation matrix in map coordinate system
+    transform_GNSS, R_Euler_GNSS, R_vec_GNSS, t_vec_GNSS = quat2transform(GNSS_pose)
+    
+    
+    # Calculate errors of GNSS pose
+    rse_transl_GNSS, rso_deg_1_GNSS, rso_deg_2_GNSS = evalMetrics(transform_GT, R_vec, R_Euler, transform_GNSS)
 
 
     # No dynamic point cloud loader for the map like in Autoware
@@ -181,6 +240,7 @@ for x in range(0,len(arr_GT_poses)):
                                                            o3d.core.Tensor([max_bound[0][0], max_bound[1][0], max_bound[2][0]]))
     target_pc = o3d.t.geometry.PointCloud.crop(target_pc,bbox)
     
+    #target_pc.estimate_normals() #kNN by default = 30; radius for hybrid search optional
     
     #source_pc.transform(transform_GT)
     #draw_registration_result(source_pc, target_pc, transform_GT)
@@ -291,30 +351,16 @@ for x in range(0,len(arr_GT_poses)):
                     init_fitness = np.nan
                     init_rmse = np.nan
 
-                # Get relative translation error
-                l2 = np.sum(np.power((trans_init_updated[:,3]-transform_GT[:,3]),2))
-                rse_transl = np.sqrt(l2)      #Euclidian distance between GT pose and estimated pose
-        
-                ### Get relative rotation error of predicted rotation vector compared to GT rotation vector - Angle in deg between those vectors
-                final_rot_matrix = trans_init_updated [0:3,0:3]
-                r = R.from_matrix(final_rot_matrix)
-                R_vec_final = r.as_rotvec()
-
-
-                unit_vector_1 = R_vec / np.linalg.norm(R_vec)
-                unit_vector_2 = R_vec_final / np.linalg.norm(R_vec_final)
-                dot_product = np.dot(unit_vector_1, unit_vector_2)
-                angle = abs(np.arccos(dot_product))
-                rso_deg_1 = np.rad2deg(angle)
-            
-                rso_deg_2 = abs(R_Euler[2]-R_Euler_updated[2]) * (180/np.pi)  # Error of the yaw angle in deg
-                #rso_deg_2 = np.rad2deg(np.arccos((np.trace(R_matrix * np.transpose(final_rot_matrix)) - 1)/2)) #from Literature
+                # Calculate evaluation metrics
+                rse_transl, rso_deg_1, rso_deg_2 = evalMetrics(transform_GT, R_vec, R_Euler, trans_init_updated)
+                
+                time.sleep(0.5)
 
                 with open(path_csv, 'a') as f: 
-                    f.write(str(ID) + '; ' + str(timestamp) + '; ' + str(int(k)) + '; ' + str(csv_output[0]) + '; ' + str(csv_output[1]) + '; ' + str(csv_output[2]) + 
-                         '; ' + str(init_fitness) + '; ' + str(init_rmse) 
-                           + '; ' + str(float(len(arr_corr))) + '; '
-                           + str(rse_transl) + '; ' + str(rso_deg_1) + '; ' + str(rso_deg_2) + '; ')
+                    f.write(str(ID) + ';' + str(timestamp) + ';' + str(int(k)) + ';' + str(csv_output[0]) + ';' + str(csv_output[1]) + ';' + str(csv_output[2]) + 
+                         ';' + str(init_fitness) + ';' + str(init_rmse) 
+                           + ';' + str(float(len(arr_corr))) + ';'
+                           + str(rse_transl) + ';' + str(rso_deg_1) + ';' + str(rso_deg_2) + ';')
     
                 ############ REGISTRATION ####################
                 s = time.time()
@@ -325,6 +371,7 @@ for x in range(0,len(arr_GT_poses)):
 
                 icp_time = time.time() - s
                 
+                # Check registration results
                 if registration_icp != None: 
             
                     final_transform = registration_icp.transformation.numpy()
@@ -344,60 +391,45 @@ for x in range(0,len(arr_GT_poses)):
                     fitness = np.nan
                     rmse = np.nan
                     
-                    iter
+                    iter_log = []
         
-                ### Get relative translation error of predicted pose compared to GT - Euclidean distance (L2 norm)
-                l2 = np.sum(np.power((final_transform[:,3]-transform_GT[:,3]),2))
-                rse_transl = np.sqrt(l2)      #Euclidian distance between GT pose and estimated pose
-        
-                ### Get relative rotation error of predicted rotation vector compared to GT rotation vector - Angle in deg between those vectors
-                final_rot_matrix = copy.deepcopy(final_transform [0:3,0:3])
-                r = R.from_matrix(final_rot_matrix)
-                R_vec_final = r.as_rotvec()
-            
-                R_Euler_final = r.as_euler('xyz')
-
-
-                unit_vector_1 = R_vec / np.linalg.norm(R_vec)
-                unit_vector_2 = R_vec_final / np.linalg.norm(R_vec_final)
-                dot_product = np.dot(unit_vector_1, unit_vector_2)
-                angle = abs(np.arccos(dot_product))
-                rso_deg_1 = np.rad2deg(angle)
-            
-                rso_deg_2 = abs(R_Euler[2]-R_Euler_final[2]) * (180/np.pi)  # Error of the yaw angle in deg
-                #rso_deg_2 = np.rad2deg(np.arccos((np.trace(R_matrix * np.transpose(final_rot_matrix)) - 1)/2)) #from Literature
+                # Calculate evaluation metrics
+                rse_transl, rso_deg_1, rso_deg_2 = evalMetrics(transform_GT, R_vec, R_Euler, final_transform)
 
 
                 print("Time taken by ICP: ", icp_time)
                 print("Inlier Fitness: ", fitness)
                 print("Inlier RMSE: ", rmse)
+                
+                time.sleep(0.5)
             
                 with open(path_csv, 'a') as f: 
-                    f.write(str(fitness) + '; ' + str(rmse) 
-                            + '; ' + str(float(len(arr_corr))) + '; '
-                            + str(rse_transl) + '; ' + str(rso_deg_1) + '; ' + str(rso_deg_2)
-                            + '; ' + str(number_iterations) + '; ' + str(icp_time) + '\n')
+                    f.write(str(fitness) + ';' + str(rmse) 
+                            + ';' + str(float(len(arr_corr))) + ';'
+                            + str(rse_transl) + ';' + str(rso_deg_1) + ';' + str(rso_deg_2)
+                            + ';' + str(number_iterations) + ';' + str(icp_time) 
+                            + ';' + str(rse_transl_GNSS) + ';' + str(rso_deg_1_GNSS) + ';' + str(rso_deg_2_GNSS) + '\n')
             
                 if iter_log != []:
                     for entry in iter_log:   
                         with open(path_csv_iter, 'a') as f:
-                            f.write(str(ID) + '; ' + str(timestamp) + '; ' +
-                                str(k) + '; ' + str(n) + '; ' + str(entry[0]) + '; '
-                                + str(entry[1]) + '; ' + str(entry[2]) + '; '
-                                + str(entry[3][0][0]) + '; ' + str(entry[3][0][1]) + '; ' + str(entry[3][0][2]) + '; ' + str(entry[3][0][3]) + '; '
-                                + str(entry[3][1][0]) + '; ' + str(entry[3][1][1]) + '; ' + str(entry[3][1][2]) + '; ' + str(entry[3][1][3]) + '; '
-                                + str(entry[3][2][0]) + '; ' + str(entry[3][2][1]) + '; ' + str(entry[3][2][2]) + '; ' + str(entry[3][2][3]) + '; '
-                                + str(entry[3][3][0]) + '; ' + str(entry[3][3][1]) + '; ' + str(entry[3][3][2]) + '; ' + str(entry[3][3][3]) + '\n')
+                            f.write(str(ID) + ';' + str(timestamp) + ';' +
+                                str(k) + ';' + str(n) + ';' + str(entry[0]) + ';'
+                                + str(entry[1]) + ';' + str(entry[2]) + ';'
+                                + str(entry[3][0][0]) + ';' + str(entry[3][0][1]) + ';' + str(entry[3][0][2]) + ';' + str(entry[3][0][3]) + ';'
+                                + str(entry[3][1][0]) + ';' + str(entry[3][1][1]) + ';' + str(entry[3][1][2]) + ';' + str(entry[3][1][3]) + ';'
+                                + str(entry[3][2][0]) + ';' + str(entry[3][2][1]) + ';' + str(entry[3][2][2]) + ';' + str(entry[3][2][3]) + ';'
+                                + str(entry[3][3][0]) + ';' + str(entry[3][3][1]) + ';' + str(entry[3][3][2]) + ';' + str(entry[3][3][3]) + '\n')
         
                 else:
                    with open(path_csv_iter, 'a') as f:
-                       f.write(str(ID) + '; ' + str(timestamp) + '; ' +
-                           str(k) + '; ' + str(n) + '; ' + str(np.nan) + '; '
-                           + str(np.nan) + '; ' + str(np.nan) + '; '
-                           + str(np.nan) + '; ' + str(np.nan) + '; ' + str(np.nan) + '; ' + str(np.nan) + '; '
-                           + str(np.nan) + '; ' + str(np.nan) + '; ' + str(np.nan) + '; ' + str(np.nan) + '; '
-                           + str(np.nan) + '; ' + str(np.nan) + '; ' + str(np.nan) + '; ' + str(np.nan) + '; '
-                           + str(np.nan) + '; ' + str(np.nan) + '; ' + str(np.nan) + '; ' + str(np.nan) + '\n')
+                       f.write(str(ID) + ';' + str(timestamp) + ';' +
+                           str(k) + ';' + str(n) + ';' + str(np.nan) + ';'
+                           + str(np.nan) + ';' + str(np.nan) + ';'
+                           + str(np.nan) + ';' + str(np.nan) + ';' + str(np.nan) + ';' + str(np.nan) + ';'
+                           + str(np.nan) + ';' + str(np.nan) + ';' + str(np.nan) + ';' + str(np.nan) + ';'
+                           + str(np.nan) + ';' + str(np.nan) + ';' + str(np.nan) + ';' + str(np.nan) + ';'
+                           + str(np.nan) + ';' + str(np.nan) + ';' + str(np.nan) + ';' + str(np.nan) + '\n')
                    
 
                 iter_log = []
@@ -446,31 +478,16 @@ for x in range(0,len(arr_GT_poses)):
                     init_fitness = np.nan
                     init_rmse = np.nan
                     
-                # Get relative translation error
-                l2 = np.sum(np.power((trans_init_updated[:,3]-transform_GT[:,3]),2))
-                rse_transl = np.sqrt(l2)      #Euclidian distance between GT pose and estimated pose
-        
-                ### Get relative rotation error of predicted rotation vector compared to GT rotation vector - Angle in deg between those vectors
-                final_rot_matrix = trans_init_updated [0:3,0:3]
-                r = R.from_matrix(final_rot_matrix)
-                R_vec_final = r.as_rotvec()
+                # Calculate evaluation metrics
+                rse_transl, rso_deg_1, rso_deg_2 = evalMetrics(transform_GT, R_vec, R_Euler, trans_init_updated)
 
-
-                unit_vector_1 = R_vec / np.linalg.norm(R_vec)
-                unit_vector_2 = R_vec_final / np.linalg.norm(R_vec_final)
-                dot_product = np.dot(unit_vector_1, unit_vector_2)
-                angle = abs(np.arccos(dot_product))
-                rso_deg_1 = np.rad2deg(angle)
-            
-                rso_deg_2 = abs(R_Euler[2]-R_Euler_updated[2]) * (180/np.pi)  # Error of the yaw angle in deg
-                #rso_deg_2 = np.rad2deg(np.arccos((np.trace(R_matrix * np.transpose(final_rot_matrix)) - 1)/2)) #from Literature
-
-    
+                time.sleep(0.5)
                 with open(path_csv, 'a') as f: 
-                    f.write(str(ID) + '; ' + str(timestamp) + '; ' + str(axis2Deval[0]) + ',' + str(axis2Deval[1]) + '; ' + str(csv_output[0]) + '; ' + str(csv_output[1]) + '; ' + str(csv_output[2]) + 
-                         '; ' + str(init_fitness) + '; ' + str(init_rmse) 
-                           + '; ' + str(float(len(arr_corr))) + '; '
-                           + str(rse_transl) + '; ' + str(rso_deg_1) + '; ' + str(rso_deg_2) + '; ')
+                    f.write(str(ID) + ';' + str(timestamp) + ';' + str(axis2Deval[0]) + ',' + str(axis2Deval[1]) + ';' 
+                            + str(csv_output[0]) + ';' + str(csv_output[1]) + ';' + str(csv_output[2]) + 
+                         ';' + str(init_fitness) + ';' + str(init_rmse) 
+                           + ';' + str(float(len(arr_corr))) + ';'
+                           + str(rse_transl) + ';' + str(rso_deg_1) + ';' + str(rso_deg_2) + ';')
     
                 ####### REGISTRATION ##############################
                 s = time.time()
@@ -502,36 +519,20 @@ for x in range(0,len(arr_GT_poses)):
                     rmse = np.nan
         
         
-                ### Get relative translation error of predicted pose compared to GT - Euclidean distance (L2 norm)
-                l2 = np.sum(np.power((final_transform[:,3]-transform_GT[:,3]),2))
-                rse_transl = np.sqrt(l2)      #Euclidian distance between GT pose and estimated pose
-        
-                ### Get relative rotation error of predicted rotation vector compared to GT rotation vector - Angle in deg between those vectors
-                final_rot_matrix = copy.deepcopy(final_transform [0:3,0:3])
-                r = R.from_matrix(final_rot_matrix)
-                R_vec_final = r.as_rotvec()
-            
-                R_Euler_final = r.as_euler('xyz')
-
-
-                unit_vector_1 = R_vec / np.linalg.norm(R_vec)
-                unit_vector_2 = R_vec_final / np.linalg.norm(R_vec_final)
-                dot_product = np.dot(unit_vector_1, unit_vector_2)
-                angle = abs(np.arccos(dot_product))
-                rso_deg_1 = np.rad2deg(angle)
-            
-                rso_deg_2 = abs(R_Euler[2]-R_Euler_final[2]) * (180/np.pi)  # Error of the yaw angle in deg
-                #rso_deg_2 = np.rad2deg(np.arccos((np.trace(R_matrix * np.transpose(final_rot_matrix)) - 1)/2)) #from Literature
+                # Calculate evaluation metrics
+                rse_transl, rso_deg_1, rso_deg_2 = evalMetrics(transform_GT, R_vec, R_Euler, final_transform)
 
                 print("Time taken by ICP: ", icp_time)
                 print("Inlier Fitness: ", fitness)
                 print("Inlier RMSE: ", rmse)
             
+                time.sleep(0.5)
                 with open(path_csv, 'a') as f: 
-                    f.write(str(fitness) + '; ' + str(rmse) 
-                            + '; ' + str(float(len(arr_corr))) + '; '
-                            + str(rse_transl) + '; ' + str(rso_deg_1) + '; ' + str(rso_deg_2)
-                            + '; ' + str(number_iterations) + '; ' + str(icp_time) + '\n')
+                    f.write(str(fitness) + ';' + str(rmse) 
+                            + ';' + str(float(len(arr_corr))) + ';'
+                            + str(rse_transl) + ';' + str(rso_deg_1) + ';' + str(rso_deg_2)
+                            + ';' + str(number_iterations) + ';' + str(icp_time) 
+                            + ';' + str(rse_transl_GNSS) + ';' + str(rso_deg_1_GNSS) + ';' + str(rso_deg_2_GNSS) +'\n')
             
             # No Log-File in this case because amount of data simply too much!
             
@@ -602,32 +603,16 @@ for x in range(0,len(arr_GT_poses)):
                         init_fitness = np.nan
                         init_rmse = np.nan
 
-                    # Get relative translation error
-                    l2 = np.sum(np.power((trans_init_updated[:,3]-transform_GT[:,3]),2))
-                    rse_transl = np.sqrt(l2)      #Euclidian distance between GT pose and estimated pose
-        
-                    ### Get relative rotation error of predicted rotation vector compared to GT rotation vector - Angle in deg between those vectors
-                    final_rot_matrix = trans_init_updated [0:3,0:3]
-                    r = R.from_matrix(final_rot_matrix)
-                    R_vec_final = r.as_rotvec()
+                    # Calculate evaluation metrics
+                    rse_transl, rso_deg_1, rso_deg_2 = evalMetrics(transform_GT, R_vec, R_Euler, trans_init_updated)
 
-
-                    unit_vector_1 = R_vec / np.linalg.norm(R_vec)
-                    unit_vector_2 = R_vec_final / np.linalg.norm(R_vec_final)
-                    dot_product = np.dot(unit_vector_1, unit_vector_2)
-                    angle = abs(np.arccos(dot_product))
-                    rso_deg_1 = np.rad2deg(angle)
-            
-                    rso_deg_2 = abs(R_Euler[2]-R_Euler_updated[2]) * (180/np.pi)  # Error of the yaw angle in deg
-                    #rso_deg_2 = np.rad2deg(np.arccos((np.trace(R_matrix * np.transpose(final_rot_matrix)) - 1)/2)) #from Literature
-
-         
+                    time.sleep(0.5)
                     with open(path_csv, 'a') as f: 
-                        f.write(str(ID) + '; ' + str(timestamp) + '; ' + str(axis2Deval[0]) + ',' + str(axis2Deval[1]) + 
-                            '; ' + str(csv_output[0]) + '; ' + str(csv_output[1]) + '; ' + str(el3) + 
-                         '; ' + str(init_fitness) + '; ' + str(init_rmse) 
-                           + '; ' + str(float(len(arr_corr))) + '; '
-                           + str(rse_transl) + '; ' + str(rso_deg_1) + '; ' + str(rso_deg_2) + '; ')
+                        f.write(str(ID) + ';' + str(timestamp) + ';' + str(axis2Deval[0]) + ',' + str(axis2Deval[1]) + 
+                            ';' + str(csv_output[0]) + ';' + str(csv_output[1]) + ';' + str(el3) + 
+                         ';' + str(init_fitness) + ';' + str(init_rmse) 
+                           + ';' + str(float(len(arr_corr))) + ';'
+                           + str(rse_transl) + ';' + str(rso_deg_1) + ';' + str(rso_deg_2) + ';')
     
                     ############# REGISTRATION ###########################
                     s = time.time()
@@ -659,36 +644,20 @@ for x in range(0,len(arr_GT_poses)):
                         rmse = np.nan
             
         
-                    ### Get relative translation error of predicted pose compared to GT - Euclidean distance (L2 norm)
-                    l2 = np.sum(np.power((final_transform[:,3]-transform_GT[:,3]),2))
-                    rse_transl = np.sqrt(l2)      #Euclidian distance between GT pose and estimated pose
-        
-                    ### Get relative rotation error of predicted rotation vector compared to GT rotation vector - Angle in deg between those vectors
-                    final_rot_matrix = copy.deepcopy(final_transform [0:3,0:3])
-                    r = R.from_matrix(final_rot_matrix)
-                    R_vec_final = r.as_rotvec()
-            
-                    R_Euler_final = r.as_euler('xyz')
-
-
-                    unit_vector_1 = R_vec / np.linalg.norm(R_vec)
-                    unit_vector_2 = R_vec_final / np.linalg.norm(R_vec_final)
-                    dot_product = np.dot(unit_vector_1, unit_vector_2)
-                    angle = abs(np.arccos(dot_product))
-                    rso_deg_1 = np.rad2deg(angle)
-            
-                    rso_deg_2 = abs(R_Euler[2]-R_Euler_final[2]) * (180/np.pi)  # Error of the yaw angle in deg
-                    #rso_deg_2 = np.rad2deg(np.arccos((np.trace(R_matrix * np.transpose(final_rot_matrix)) - 1)/2)) #from Literature
+                    # Calculate evaluation metrics
+                    rse_transl, rso_deg_1, rso_deg_2 = evalMetrics(transform_GT, R_vec, R_Euler, final_transform)
  
                     print("Time taken by ICP: ", icp_time)
                     print("Inlier Fitness: ", fitness)
                     print("Inlier RMSE: ", rmse)
             
+                    time.sleep(0.5)
                     with open(path_csv, 'a') as f: 
-                        f.write(str(fitness) + '; ' + str(rmse) 
-                            + '; ' + str(float(len(arr_corr))) + '; '
-                            + str(rse_transl) + '; ' + str(rso_deg_1) + '; ' + str(rso_deg_2)
-                            + '; ' + str(number_iterations) + '; ' + str(icp_time) + '\n')
+                        f.write(str(fitness) + ';' + str(rmse) 
+                            + ';' + str(float(len(arr_corr))) + ';'
+                            + str(rse_transl) + '; ' + str(rso_deg_1) + ';' + str(rso_deg_2)
+                            + ';' + str(number_iterations) + ';' + str(icp_time) 
+                            + ';' + str(rse_transl_GNSS) + ';' + str(rso_deg_1_GNSS) + ';' + str(rso_deg_2_GNSS) +'\n')
                         
                 # No Log-File in this case because amount of data simply too much!!!
             
@@ -716,4 +685,3 @@ for x in range(0,len(arr_GT_poses)):
        
 
 #draw_registration_result(source_pc, target_pc, registration_icp.transformation)
-

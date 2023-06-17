@@ -25,11 +25,11 @@ path_map = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Mori
 path_GT_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\14_Local_Pose.csv"
 path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation"
 
-path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\B000_IterStepsBaselineICPMoriyama.csv"
+path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C113_IterStepsBaselineICPMoriyama.csv"
 
 Idx_timestamp = 1 
-Idx_axis = 0  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
-Idx_init = 5  # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
+Idx_axis = 2  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
+Idx_init = 15 # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
 
 #Load GT poses from csv
 df_GT = pd.read_csv(path_GT_csv, delimiter = ',', header = 0)
@@ -106,9 +106,9 @@ df = pd.read_csv(path_to_ITcsv, delimiter = ';', header = 0)
 ## Axis 0,1,2 are for translation
 ## Axis 3,4,5 are for rotation
 
-timestamps = df.groupby(' Timestamp').groups.keys()
-axes = df.groupby(' Axis').groups.keys()
-init_values = df.groupby(' Init Error (Trans or Rot)').groups.keys()
+timestamps = df.groupby('Timestamp').groups.keys()
+axes = df.groupby('Axis').groups.keys()
+init_values = df.groupby('Init Error (Trans or Rot)').groups.keys()
 
 timestamp_1 = list(timestamps)[Idx_timestamp]
 axis_1 = list(axes)[Idx_axis]
@@ -145,13 +145,17 @@ R_matrix_init = r.as_matrix()
 transform_init[0:3,0:3] = R_matrix_init
 
 
-df = df.loc[df[' Timestamp'] == timestamp_1]
-df = df.loc[df[' Axis'] == axis_1]
-df = df.loc[df[' Init Error (Trans or Rot)'] == init_value_1]
+df = df.loc[df['Timestamp'] == timestamp_1]
+df = df.loc[df['Axis'] == axis_1]
+df = df.loc[df['Init Error (Trans or Rot)'] == init_value_1]
 
 print('Found %s iteration steps for\nTimestamp number 0, manipulated axis %s with value %s' %(str(len(df)), str(axis_1), str(init_value_1)))
 
+mesh_map = o3d.geometry.TriangleMesh.create_coordinate_frame(
+    size=20, origin=[t_vec.T[0][0]-2, t_vec.T[0][1]-45, t_vec.T[0][2]]) #[t_vec.T[0][0]-20, t_vec.T[0][1]-20, t_vec.T[0][2]]
 
+mesh_lidar = o3d.geometry.TriangleMesh.create_coordinate_frame(size = 15, origin = [0,0,0])
+mesh_lidar.transform(transform_init)
 source_temp = copy.deepcopy(source_pc)
 
 vis = o3d.visualization.Visualizer()
@@ -160,6 +164,8 @@ ctr = vis.get_view_control()
 
 vis.add_geometry(source_temp, reset_bounding_box = True)
 vis.add_geometry(target_pc, reset_bounding_box = True)
+vis.add_geometry(mesh_map)
+vis.add_geometry(mesh_lidar)
 
 ctr.set_zoom(0.8)
 
@@ -169,6 +175,7 @@ vis.reset_view_point(True)
 vis.update_geometry(source_temp)
 vis.poll_events()
 vis.update_renderer()
+
 #vis.run()
 #vis.run()  # user changes the view and press "q" to terminate
 #param = vis.get_view_control().convert_to_pinhole_camera_parameters()
@@ -178,6 +185,7 @@ vis.update_renderer()
 
 transform_init_inv = np.linalg.inv(transform_init)
 source_temp.transform(transform_init_inv)
+mesh_lidar.transform(transform_init_inv)
 
 t_matrix = np.zeros((4,4))
 t_matrix_inv = np.identity(4)
@@ -211,11 +219,14 @@ for i in range(0,len(df)):
     #vis.add_geometry(target_pc, reset_bounding_box = True)
     
     source_temp.transform(t_matrix_inv)
+    mesh_lidar.transform(t_matrix_inv)
     time.sleep(0.1)
     source_temp.transform(t_matrix)
+    mesh_lidar.transform(t_matrix)
     vis.reset_view_point(True)
     time.sleep(0.5)
     vis.update_geometry(source_temp)
+    vis.update_geometry(mesh_lidar)
     vis.poll_events()
     vis.update_renderer()
     
@@ -224,5 +235,7 @@ for i in range(0,len(df)):
     
     t_matrix_inv = np.linalg.inv(t_matrix)
 
+
+vis.run()
 vis.destroy_window() 
 o3d.utility.set_verbosity_level(o3d.utility.VerbosityLevel.Info)   
