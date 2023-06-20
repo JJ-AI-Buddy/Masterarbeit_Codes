@@ -279,4 +279,4 @@ for x in range(0,len(arr_GT_poses)):
                     str(final_transform[2][0]) + ';' + str(final_transform[2][1]) + ';' + str(final_transform[2][2]) + ';' + str(final_transform[2][3]) + ';' +
                     str(final_transform[3][0]) + ';' + str(final_transform[3][1]) + ';' + str(final_transform[3][2]) + ';' + str(final_transform[3][3]) + ';\n')
     
-        #draw_registration_result(source_down, target_down, result_fast.transformation)      
+        #draw_registration_result(source_down, target_down, transform_GT)      

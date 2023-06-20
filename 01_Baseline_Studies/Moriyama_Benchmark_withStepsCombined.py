@@ -16,13 +16,22 @@ import time
 
 
 def draw_registration_result(source, target, transformation):
+    global t_vec
     source_temp = source.clone()
     target_temp = target.clone()
+    
+    mesh_map = o3d.t.geometry.TriangleMesh.create_coordinate_frame(
+        size=20, origin=[t_vec.T[0][0]-2, t_vec.T[0][1]-45, t_vec.T[0][2]]) #[t_vec.T[0][0]-20, t_vec.T[0][1]-20, t_vec.T[0][2]]
+
+    mesh_lidar = o3d.geometry.TriangleMesh.create_coordinate_frame(size = 15, origin = [0,0,0])
+    mesh_lidar.transform(transformation)
 
     source_temp.transform(transformation)
     o3d.visualization.draw(
         [source_temp.to_legacy(),
-        target_temp.to_legacy()])
+        target_temp.to_legacy(),
+        mesh_map,
+        mesh_lidar])
 
 def quat2transform (pose):
     #pose N-tuple with 7 entries (x,y,z,orient x, orient y, orient z, orient w)
@@ -78,17 +87,17 @@ else: bool_rot = False
 bool_1D = False      #if True only one of the above also has to be true (ATTENTION! both at the same time cannot be true)
 
 
-bool_2D = True         # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
-bool_2D_Yaw = False     # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
+bool_2D = False        # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
+bool_2D_Yaw = True     # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
                         # The third entry encodes the rotation axis; if we want the yaw-angle (z-axis) we have to set the last entry to 5
 
-ID = 'C023'        # Set ID like specified in the documentation
+ID = 'C133'        # Set ID like specified in the documentation
 
 # ICP parameters
 max_correspondence_distance = 0.1   # max. distance between two points to be seen as correct correspondence (=: inlier)
     
-estimation = o3d.t.pipelines.registration.TransformationEstimationPointToPoint()
-#estimation = o3d.t.pipelines.registration.TransformationEstimationPointToPlane()
+#estimation = o3d.t.pipelines.registration.TransformationEstimationPointToPoint()
+estimation = o3d.t.pipelines.registration.TransformationEstimationPointToPlane()
    
 #Convergence criteria
 m_iters = 30
@@ -118,16 +127,16 @@ path_GT_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_M
 path_GNSS_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\13_GNSS_pose.csv"
 path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation"
 
-name_txt = str(ID) + '_TranslXYBaselineICPMoriyama.txt'
+name_txt = str(ID) + '_TranslXYYawBaselineICPMoriyama.txt'
 path_txt = os.path.join(path_to_file, name_txt)
-name_csv = str(ID) + '_TranslXYBaselineICPMoriyama.csv'
+name_csv = str(ID) + '_TranslXYYawBaselineICPMoriyama.csv'
 path_csv = os.path.join(path_to_file,name_csv)
 name_csv_iter = str(ID) + '_IterStepsBaselineICPMoriyama.csv'
 path_csv_iter = os.path.join(path_to_file, name_csv_iter)
 
 #Prepare CSV file
 with open(path_csv, 'w') as f:
-    f.write('ID;Timestamp GT Pose;Axis;Initial Transl x;Initial Transl y;Initial Transl z;Initial fitness;Initial RMSE Inliers;Initial Inlier correspondences;Initial Transl. Error [m];Initial Rot. Error 1 [°];Initial Rot. Error 2 [°];Fitness;RMSE Inliers;Inlier correspondences;Transl. Error [m];Rot. Error 1 [°];Rot. Error 2 [°];Number Iterations;Execut. Time [s];GNSS Transl. Error[m];GNSS Rot. Error 1 [°];GNSS Rot. Error 2 [°]\n')
+    f.write('ID;Timestamp GT Pose;Axis;Initial Transl x;Initial Transl y;Initial Rot z;Initial fitness;Initial RMSE Inliers;Initial Inlier correspondences;Initial Transl. Error [m];Initial Rot. Error 1 [°];Initial Rot. Error 2 [°];Fitness;RMSE Inliers;Inlier correspondences;Transl. Error [m];Rot. Error 1 [°];Rot. Error 2 [°];Number Iterations;Execut. Time [s];GNSS Transl. Error[m];GNSS Rot. Error 1 [°];GNSS Rot. Error 2 [°]\n')
 
 #Prepare txt file
 with open(path_txt, 'w') as f:
@@ -187,7 +196,8 @@ init_pose = arr_GT_poses[0]
 timestamp = timestamps[0]
 
 #list_inter_results = []
-#x = 1 
+
+x = 3
 #x = 3
 
 for x in range(0,len(arr_GT_poses)):
@@ -240,7 +250,7 @@ for x in range(0,len(arr_GT_poses)):
                                                            o3d.core.Tensor([max_bound[0][0], max_bound[1][0], max_bound[2][0]]))
     target_pc = o3d.t.geometry.PointCloud.crop(target_pc,bbox)
     
-    #target_pc.estimate_normals() #kNN by default = 30; radius for hybrid search optional
+    target_pc.estimate_normals() #kNN by default = 30; radius for hybrid search optional
     
     #source_pc.transform(transform_GT)
     #draw_registration_result(source_pc, target_pc, transform_GT)
@@ -684,4 +694,4 @@ for x in range(0,len(arr_GT_poses)):
     #list_iter_steps = []
        
 
-#draw_registration_result(source_pc, target_pc, registration_icp.transformation)
+#draw_registration_result(source_pc, target_pc, transform_GT)
