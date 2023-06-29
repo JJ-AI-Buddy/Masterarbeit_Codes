@@ -84,17 +84,17 @@ if bool_trans == False:
     bool_rot = True      # if True then bool_trans has to be False
 else: bool_rot = False
 
-bool_1D = False      #if True only one of the above also has to be true (ATTENTION! both at the same time cannot be true)
+bool_1D = True      #if True only one of the above also has to be true (ATTENTION! both at the same time cannot be true)
 
 
 bool_2D = False        # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
-bool_2D_Yaw = True     # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
+bool_2D_Yaw = False     # if True you also have to check the 'axis2Deval' variable; the first two entries denote the index of the two axes to evaluate at the same time 0 = x-axis, 1 = y-axis, 2 = z-axis
                         # The third entry encodes the rotation axis; if we want the yaw-angle (z-axis) we have to set the last entry to 5
 
-ID = 'C133'        # Set ID like specified in the documentation
+ID = 'C110'        # Set ID like specified in the documentation
 
 # ICP parameters
-max_correspondence_distance = 0.1   # max. distance between two points to be seen as correct correspondence (=: inlier)
+max_correspondence_distance = 0.5   # max. distance between two points to be seen as correct correspondence (=: inlier)
     
 #estimation = o3d.t.pipelines.registration.TransformationEstimationPointToPoint()
 estimation = o3d.t.pipelines.registration.TransformationEstimationPointToPlane()
@@ -107,10 +107,10 @@ rel_fit = 0.0001
 voxel_size = -1   # -1 no downsampling
 save_loss_log = True
     
-lower_limits = [-2,-2,-2,-np.pi/4,-np.pi/4,-np.pi/4]    #x,y,z, alpha, beta, gamma
-upper_limits = [2,2,2, np.pi/4,np.pi/4,np.pi/4]       #x,y,z, alpha, beta, gamma
+lower_limits = [-50,-50,0,-np.pi/2,-np.pi/2,-np.pi/2]    #x,y,z, alpha, beta, gamma
+upper_limits = [50,50,0, np.pi/2,np.pi/2,np.pi/2]       #x,y,z, alpha, beta, gamma
 
-number_eval_points = [9,9,9,9,9,9]    #[17,17,17,17,17,17] for 1D, [9,9,9,9,9,9] for 2D
+number_eval_points = [21,21,1,10,10,10]    #[17,17,17,17,17,17] for 1D, [9,9,9,9,9,9] for 2D
     
 axis2Deval = [0,1,5] 
 
@@ -127,24 +127,25 @@ path_GT_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_M
 path_GNSS_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\13_GNSS_pose.csv"
 path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation"
 
-name_txt = str(ID) + '_TranslXYYawBaselineICPMoriyama.txt'
+name_txt = str(ID) + '_BigRotBaselineICPMoriyama.txt'
 path_txt = os.path.join(path_to_file, name_txt)
-name_csv = str(ID) + '_TranslXYYawBaselineICPMoriyama.csv'
+name_csv = str(ID) + '_BigRotBaselineICPMoriyama.csv'
 path_csv = os.path.join(path_to_file,name_csv)
-name_csv_iter = str(ID) + '_IterStepsBaselineICPMoriyama.csv'
+name_csv_iter = str(ID) + '_BigRotStepsBaselineICPMoriyama.csv'
 path_csv_iter = os.path.join(path_to_file, name_csv_iter)
 
 #Prepare CSV file
 with open(path_csv, 'w') as f:
-    f.write('ID;Timestamp GT Pose;Axis;Initial Transl x;Initial Transl y;Initial Rot z;Initial fitness;Initial RMSE Inliers;Initial Inlier correspondences;Initial Transl. Error [m];Initial Rot. Error 1 [°];Initial Rot. Error 2 [°];Fitness;RMSE Inliers;Inlier correspondences;Transl. Error [m];Rot. Error 1 [°];Rot. Error 2 [°];Number Iterations;Execut. Time [s];GNSS Transl. Error[m];GNSS Rot. Error 1 [°];GNSS Rot. Error 2 [°]\n')
+    f.write('ID;Timestamp GT Pose;Axis;Initial Transl x;Initial Transl y;Initial Transl z;Initial fitness;Initial RMSE Inliers;Initial Inlier correspondences;Initial Transl. Error [m];Initial Rot. Error 1 [°];Initial Rot. Error 2 [°];Fitness;RMSE Inliers;Inlier correspondences;Transl. Error [m];Rot. Error 1 [°];Rot. Error 2 [°];Number Iterations;Execut. Time [s];GNSS Transl. Error[m];GNSS Rot. Error 1 [°];GNSS Rot. Error 2 [°]\n')
 
 #Prepare txt file
 with open(path_txt, 'w') as f:
     f.write('Evaluation of ICP algorithm for map matching on Moriyama dataset \n' + str(datetime.now()) + "\n\n")
 
-#Prepare Iter step CSV file
-with open(path_csv_iter, 'w') as f:
-    f.write('ID;Timestamp;Axis;Init Error (Trans or Rot);Iteration Step Index;Fitness;Inlier RMSE [m];t11;t12;t13;t14;t21;t22;t23;t24;t31;t32;t33;t34;t41;t42;t43;t44\n')
+if bool_1D == True:
+    #Prepare Iter step CSV file
+    with open(path_csv_iter, 'w') as f:
+        f.write('ID;Timestamp;Axis;Init Error (Trans or Rot);Iteration Step Index;Fitness;Inlier RMSE [m];t11;t12;t13;t14;t21;t22;t23;t24;t31;t32;t33;t34;t41;t42;t43;t44\n')
 
 
 #Load GT poses from csv
@@ -197,7 +198,7 @@ timestamp = timestamps[0]
 
 #list_inter_results = []
 
-x = 3
+#x = 3
 #x = 3
 
 for x in range(0,len(arr_GT_poses)):

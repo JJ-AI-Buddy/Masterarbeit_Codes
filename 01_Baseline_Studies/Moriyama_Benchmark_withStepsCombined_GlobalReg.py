@@ -231,7 +231,7 @@ for x in range(0,len(arr_GT_poses)):
     
     for n in range(0,len(voxel_size_scale)):
 
-        voxel_size = voxel_size_scale[n]
+        voxel_size = float(voxel_size_scale[n])
         #Prepare / Preprocess point clouds (Downsampling, FPFH Features)
         source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(path_pc, path_map,voxel_size)
     

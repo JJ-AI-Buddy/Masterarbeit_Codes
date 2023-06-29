@@ -15,11 +15,11 @@ pio.renderers.default='browser'   #'browser'
 
 #########################################
 ### Choose file with x2x name
-path_to_eval = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C120_TranslXYBaselineICPMoriyama.csv"
+path_to_eval = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C123_TranslXYBaselineICPMoriyama.csv"
 ### Choose which timestamp to evaluate
-Idx_timestamp = 0
+Idx_timestamp = 3
 ### Choose if transl. error or rotation error should be displayed
-bool_rot = False
+bool_rot = True
 
 ##########################################
 
@@ -36,8 +36,9 @@ else:
 
 
 # Read data from a csv
-data = pd.read_csv(path_to_eval, delimiter = ';', header = 0, engine = 'python', encoding= 'unicode_escape')
+data = pd.read_csv(path_to_eval, delimiter = ';', header = 0, engine = 'python', encoding= 'unicode_escape', )
 
+data = data.fillna(0.0)
 
 timestamps = data.groupby('Timestamp GT Pose').groups.keys()
 first_axis = data.groupby('Initial Transl x').groups.keys()
