@@ -1,0 +1,3 @@
+﻿  NDT_Registration_Eval.cpp
+C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\CPPscripts\NDT_Registration_Eval.cpp(120,22): warning C4129: "M": nicht erkannte Folge von Escapesequenz
+  ndt_reg.vcxproj -> C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\CPPscripts\build\Debug\ndt_reg.exe

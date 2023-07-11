@@ -32,8 +32,8 @@ path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_
 
 path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C010_BigRotStepsBaselineICPMoriyama.csv"
 
-Idx_timestamp = 1
-Idx_axis = 2  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
+Idx_timestamp = 3
+Idx_axis = 0  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
 Idx_init = 0 # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
 Value_init = '-90 °' #If known please add the value as string (value + unit)
 
@@ -177,7 +177,7 @@ ctr = vis.get_view_control()
 
 #Add text
 
-text = "Moriyama Dataset (Japan)\nTimestamp: " + str(Idx_timestamp) + "\nManipulated axis ID: " + str(Idx_axis) + "\nInitial offset: " + str(Value_init) + "\n\nIteration: " + str(i)
+text = "Moriyama Dataset (Japan)\nTimestamp: " + str(Idx_timestamp) + "\nManipulated axis ID: " + str(Idx_axis) + "\nInitial offset: " + str(Value_init) + "\n\nIterations: " + str(len(df))
 img = Image.new('RGB', (WINDOW_WIDTH, WINDOW_HEIGHT), color = (255,255,255,0))
 font = ImageFont.truetype(r'arial.ttf', 25)
 d = ImageDraw.Draw(img)
@@ -239,6 +239,7 @@ save_image = False
 #                 [t_vec.T[0][2]], dtype = np.float32)
 
 
+
 for i in range(0,len(df)):
     
     t_matrix[0,0] = df.iloc[i,7]
@@ -280,7 +281,7 @@ for i in range(0,len(df)):
     d.text((1200,10), text, font=font, fill=(0,0,0), align = 'center')
     img.save('pil_text_2.png')
 
-    im_2 = o3d.io.read_image("./pil_text_2.png")
+    im = o3d.io.read_image("./pil_text_2.png")
     
 
     
@@ -298,11 +299,12 @@ for i in range(0,len(df)):
     #vis.add_geometry(im_2)
     #vis.poll_events()
     #vis.update_renderer()
-    time.sleep(0.1)
+    #time.sleep(0.1)
     #vis.reset_view_point(True)
-    #vis.update_geometry(im)
+    #vis.add_geometry(im)
     #vis.poll_events()
-    #vis.update_renderer()
+   # vis.update_renderer()
+    #time.sleep(0.5)
     vis.reset_view_point(True)
     vis.update_geometry(target_pc)
     vis.poll_events()
@@ -337,6 +339,14 @@ for i in range(0,len(df)):
 source_GT = copy.deepcopy(source_pc)
 source_GT.paint_uniform_color([1.0, 0, 0])
 source_GT.transform(transform_GT)
+
+dists = source_GT.compute_point_cloud_distance(source_temp)
+dists = np.asarray(dists)
+ind = np.where(dists > 0.01)[0]
+#pcd_without_chair = pcd.select_by_index(ind)
+print("\nAveraged distance over all points betweeen final pose and Ground Truth in m: %f\nStandard deviation: %f" %(dists.mean(), dists.std()))
+
+
 vis.reset_view_point(True)
 vis.add_geometry(source_GT)
 vis.poll_events()
