@@ -382,7 +382,30 @@ main()
     pcl::PointCloud<pcl::PointXYZ>::Ptr croppedTargetCloud(new pcl::PointCloud<pcl::PointXYZ>);
     cropBoxFilter.filter(*croppedTargetCloud);
 
-    std::cout << "TEST_1 " << std::to_string(arr_GT_poses[idx][0]) << std::endl;
+    //std::cout << "TEST_1 " << std::to_string(arr_GT_poses[idx][0]) << std::endl;
+
+    // Write to txt.-File
+    // 
+    // Create an output file stream
+    std::ofstream outfile;
+
+    // Open the file in output mode
+    outfile.open(path_txt);
+
+    // Check if the file was opened successfully
+    if (!outfile) {
+        std::cerr << "Error opening txt.-file." << std::endl;
+        return 1;
+    }
+
+    // Write data to the file
+    outfile << "Hello, world!" << std::endl;
+    outfile << "This is a sample text file." << std::endl;
+
+    // Close the file
+    outfile.close();
+
+    std::cout << "Data written to txt.-file." << std::endl;
 
 
     // Initializing Normal Distributions Transform (NDT).

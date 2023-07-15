@@ -65,7 +65,7 @@
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\CPPscripts\build\x64\Debug\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Pythonscripts\Masterarbeit_Codes\01_Baseline_Studies\CPPscripts\build\x64\Debug\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ndt_reg.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ndt_reg</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
@@ -148,6 +148,7 @@
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Pythonscripts\Masterarbeit_Codes\01_Baseline_Studies\CPPscripts\build\x64\Debug</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;__SSE4_2__;__SSE4_1__;__SSSE3__;__SSE3__;__SSE2__;__SSE__;BOOST_ALL_NO_LIB;BOOST_SYSTEM_NO_LIB;BOOST_FILESYSTEM_NO_LIB;BOOST_ATOMIC_NO_LIB;BOOST_IOSTREAMS_NO_LIB;BOOST_BZIP2_NO_LIB;BOOST_ZLIB_NO_LIB;BOOST_SERIALIZATION_NO_LIB;kiss_fft_scalar=double;KISSFFT_DLL_IMPORT=1;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
@@ -167,8 +168,8 @@
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/CPPscripts/build/x64/Debug/Release/ndt_reg.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/CPPscripts/build/x64/Debug/Release/ndt_reg.pdb</ProgramDataBaseFile>
+      <ImportLibrary>C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/01_Baseline_Studies/CPPscripts/build/x64/Debug/Release/ndt_reg.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/01_Baseline_Studies/CPPscripts/build/x64/Debug/Release/ndt_reg.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>

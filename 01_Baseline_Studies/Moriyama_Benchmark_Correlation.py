@@ -15,14 +15,14 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 import os
 
-Idx_timestamp = 4
+Idx_timestamp = 1
 Idx_axis = 0
 
 # Your choice
 one_axis = False
 all_axes = True
-one_timestamp = True
-all_timestamps = False
+one_timestamp = False
+all_timestamps = True
 
 if all_axes == True:
     Idx_axis = -1
@@ -42,7 +42,7 @@ if all_timestamps == True:
 title = "Correlation of evaluation metrics on Moriyama Dataset\nTimestamp ID: " + str(Idx_timestamp) + ", Axis ID: " + str(Idx_axis)
 name = 'C023_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
 
-path = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C023_TranslXYBaselineICPMoriyama.csv"
+path = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C020_TranslXYBaselineICPMoriyama.csv"
 path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\Plots"
 
 #Load GT poses from csv
@@ -67,18 +67,19 @@ if one_axis == True:
 else: pass
 
 
-corr_categories = ["Fitness", "RMSE Inliers", "Transl. Error [m]", "Rot. Error 1 [°]", "Number Iterations"]
+corr_categories = ["Fitness", "RMSE Inliers", "Number Iterations", "Initial Transl. Error [m]", "Transl. Error [m]", "Initial Rot. Error 1 [°]", "Rot. Error 1 [°]"]
 
 df_corr = df[corr_categories]
 df_corr.fillna(0)
 df_corr.astype('float64').dtypes
+print(df_corr[["Initial Rot. Error 1 [°]"]])
 
-corr_matrix = df_corr.corr()
+corr_matrix = df_corr.corr().fillna(0.0)
 matrix = np.triu(np.ones_like(corr_matrix))
 
 plt.figure(figsize = (10,8))
-ax = sn.heatmap(corr_matrix, annot=True, mask = matrix, linewidth=.5, cmap=sn.cubehelix_palette(as_cmap=True), square = True)
+ax = sn.heatmap(corr_matrix, annot=True, mask = matrix, linewidth=.5, cmap=sn.cubehelix_palette(as_cmap=True), square = True, vmin=-1, vmax=1)
 plt.title(title, fontsize = 15)
 plt.tight_layout()
-plt.savefig(os.path.join(path_plots, name))
+#plt.savefig(os.path.join(path_plots, name))
 plt.show()

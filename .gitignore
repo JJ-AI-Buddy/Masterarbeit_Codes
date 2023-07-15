@@ -4,3 +4,11 @@
 *.pdf
 *.mp4
 *.vscode
+*.pdb
+*.png
+*.pcd
+*.csv
+*.ipch
+*.db
+*.ttf
+*.opendb

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Pythonscripts\Masterarbeit_Codes\01_Baseline_Studies\CPPScripts_New\Build\CMakeFiles\dd41c3c9e1432517394ff6d80ec3589d\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{26727B6F-857D-349C-B3A5-1F7950F7C68F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

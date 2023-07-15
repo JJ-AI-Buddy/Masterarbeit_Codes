@@ -1,0 +1,7 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2116,5): warning : The referenced project 'C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\CPPscripts\build\x64\Debug\ZERO_CHECK.vcxproj' does not exist.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2116,5): warning : The referenced project 'C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\CPPscripts\build\x64\Debug\ndt_reg.vcxproj' does not exist.
+  Building Custom Rule C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/CPPscripts/CMakeLists.txt
+  CMake is re-running because C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/CPPscripts/build/x64/Debug/CMakeFiles/generate.stamp dependency file is missing.
+CUSTOMBUILD : CMake error : The source directory "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/CPPscripts" does not appear to contain CMakeLists.txt.
+  Specify --help for usage, or press the help button on the CMake GUI.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(248,5): error MSB8066: Der benutzerdefinierte Build für "C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\CPPscripts\CMakeLists.txt" wurde mit dem Code 1 beendet.

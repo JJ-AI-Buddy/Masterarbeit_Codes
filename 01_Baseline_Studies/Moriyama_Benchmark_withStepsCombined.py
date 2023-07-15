@@ -290,8 +290,8 @@ for x in range(0,len(arr_GT_poses)):
     with open(path_txt, 'a') as f:
         f.write('Parameter Set:\n\n')
         f.write('Threshold: %s\n' %str(max_correspondence_distance))
-        f.write ('Voxel Size: %s\n' %str(voxel_size))
-        f.write ('Max. Iterations: %s\n' %str(m_iters))
+        f.write('Voxel Size: %s\n' %str(voxel_size))
+        f.write('Max. Iterations: %s\n' %str(m_iters))
         f.write('Relative RMSE for convergence: %s\n' %str(rel_rmse))
         f.write('Relative Fitness for convergence: %s\n' %str(rel_fit))
         f.write('\nTranslation boundaries:\nLower limits: x = %s, y = %s, z = %s\nUpper limits: x = %s, y = %s, z = %s\nNumber of evaluation points: x = %s, y = %s, z = %s\n\n' 
