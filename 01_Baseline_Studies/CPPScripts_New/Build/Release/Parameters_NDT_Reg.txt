@@ -1,0 +1,10 @@
+bool_trans;bool_1D;bool_2D;bool_2D_Yaw;downsample;ID;ind;type;val_diff_tf;max_step;voxel_size;max_iter
+true;false;true;false;false;C220_TS01;1;_TranslXY;0.001;0.1;1.0;30
+true;false;true;false;false;C220_TS02;2;_TranslXY;0.001;0.1;1.0;30
+true;false;true;false;false;C220_TS03;3;_TranslXY;0.001;0.1;1.0;30
+true;false;true;false;false;C220_TS04;4;_TranslXY;0.001;0.1;1.0;30
+true;false;false;true;false;C230_TS00;0;_TranslXYYaw;0.001;0.1;1.0;30
+true;false;false;true;false;C230_TS01;1;_TranslXYYaw;0.001;0.1;1.0;30
+true;false;false;true;false;C230_TS02;2;_TranslXYYaw;0.001;0.1;1.0;30
+true;false;false;true;false;C230_TS03;3;_TranslXYYaw;0.001;0.1;1.0;30
+true;false;false;true;false;C230_TS04;4;_TranslXYYaw;0.001;0.1;1.0;30
