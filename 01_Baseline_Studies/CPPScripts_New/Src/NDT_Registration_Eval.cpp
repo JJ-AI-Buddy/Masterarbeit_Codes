@@ -25,6 +25,8 @@
 
 #include <pcl/visualization/pcl_visualizer.h>
 
+#include <windows.h>
+
 using namespace std::chrono_literals;
 using namespace std;
 namespace fs = std::filesystem;
@@ -123,19 +125,21 @@ std::vector<float> getElementByIndex(const std::list<std::vector<float>>& myList
     return vectorRef;
 }
 
+int index;
 
 int
 main()
 {
+
     bool bool_trans = true;
     bool bool_rot;
     bool bool_1D = false;
-    bool bool_2D = false;
+    bool bool_2D = true;
     bool bool_2D_Yaw = false;
 
     bool downsample = false;
 
-    string ID = "C200";
+    string ID = "C220";
 
     if (bool_trans == false)
     {
@@ -157,6 +161,9 @@ main()
     float voxel_size = 1.0;
     // Setting max number of registration iterations.
     int max_iter = 30;
+
+    //Timestamp index
+    int ind = 0;
 
     //
     //
@@ -212,6 +219,25 @@ main()
     outfile_text.close();
 
 
+    //Prepare the csv-file containing the transformation matrices
+    // 
+    // Create an output file stream
+    std::ofstream outfile_csv_iter;
+    // Open the file in output mode
+    outfile_csv_iter.open(path_csv_iter);
+
+    // Check if the file was opened successfully
+    if (!outfile_csv_iter) {
+        std::cerr << "Error opening csv.-file." << std::endl;
+        return 1;
+    }
+
+    // Write data to the file
+    outfile_csv_iter << "ID;Timestamp;Axis;Init Error (Trans or Rot);Number Iterations;Fitness;t11;t12;t13;t14;t21;t22;t23;t24;t31;t32;t33;t34;t41;t42;t43;t44\n";
+
+    // Close the file
+    outfile_csv_iter.close();
+
     //Prepare the csv-file
     // 
     // Create an output file stream
@@ -248,7 +274,7 @@ main()
     int sample_step = 100;
     float arr_GT_poses[5][7] = {};
 
-    std::vector<float> timestamps;
+    std::vector<double> timestamps;
 
     for (int j = 0; j < 5; j++)
     {
@@ -371,18 +397,32 @@ main()
     outfile_text.close();
     std::cout << "Data written to txt.-file." << std::endl;
 
-
+    //float timestamp;
 
     // For loop starts here
-    int idx = 0;
-    //float init_pose[7] = { *arr_GT_poses[0] };
-    //float GNSS_pose[7] = { *arr_GNSS_poses[0] };
-    //float timestamp = timestamps[0];
+    // For loop does not iterate over all values --> maybe initialize variables outside
 
+
+    //int upper = 5;
+    ind = 0; 
+    //for (ind = 0; ind < upper; ++ind) {   //(sizeof(arr_GT_poses) / sizeof(arr_GT_poses[0]))
+
+    //while (true) {
+
+    //if (m < 5) {
+    //float init_pose[7] = { *arr_GT_poses[idx] };
+    //float GNSS_pose[7] = { *arr_GNSS_poses[idx] };
+    // 
+    //double timestamp;
+    //timestamp = timestamps[idx];
+
+    std::cout << "Timestamp " << ind << std::endl;
+    //std::cout << "Timestamp " << timestamps[1] << std::endl;
+    //std::cout << "Timestamp " << timestamp << std::endl;
 
     // Loading online scan
     pcl::PointCloud<pcl::PointXYZ>::Ptr input_cloud(new pcl::PointCloud<pcl::PointXYZ>);
-    if (pcl::io::loadPCDFile<pcl::PointXYZ>(list_path_pc[0], *input_cloud) == -1)
+    if (pcl::io::loadPCDFile<pcl::PointXYZ>(list_path_pc[ind], *input_cloud) == -1)
     {
         PCL_ERROR("Couldn't read file containing online scan \n");
         return (-1);
@@ -414,14 +454,14 @@ main()
         std::cout << "Point cloud not filtered. " << std::endl;
     }
 
-    std::cout << "TEST_1 " << std::to_string(arr_GT_poses[idx][0]) << std::endl;
+    std::cout << "TEST_1 " << std::to_string(arr_GT_poses[ind][0]) << std::endl;
 
     // Works until here - 07.07.2023
 
     // Calculate Ground Truth transformation
-    Eigen::Quaternionf quaternion_GT(arr_GT_poses[idx][6], arr_GT_poses[idx][3], arr_GT_poses[idx][4], arr_GT_poses[idx][5]);
+    Eigen::Quaternionf quaternion_GT(arr_GT_poses[ind][6], arr_GT_poses[ind][3], arr_GT_poses[ind][4], arr_GT_poses[ind][5]);
     Eigen::Matrix3f init_rotation_GT = quaternion_GT.normalized().toRotationMatrix();
-    Eigen::Vector4f init_translation_GT; init_translation_GT << arr_GT_poses[idx][0], arr_GT_poses[idx][1], arr_GT_poses[idx][2], 1.0;
+    Eigen::Vector4f init_translation_GT; init_translation_GT << arr_GT_poses[ind][0], arr_GT_poses[ind][1], arr_GT_poses[ind][2], 1.0;
     Eigen::Matrix4f transform_GT;
     transform_GT.setIdentity();   // Set to Identity to make bottom row of Matrix 0,0,0,1
     transform_GT.block<3, 3>(0, 0) = init_rotation_GT;
@@ -429,12 +469,12 @@ main()
     transform_GT.col(3) = init_translation_GT;
 
     // = (init_translation_GT * init_rotation_GT).matrix();
-   //Eigen::Matrix4f* transform_GT_pointer = &transform_GT;
+    //Eigen::Matrix4f* transform_GT_pointer = &transform_GT;
 
-   //Calculate GNSS transformation
-    Eigen::Quaternionf quaternion_GNSS(arr_GNSS_poses[idx][6], arr_GNSS_poses[idx][3], arr_GNSS_poses[idx][4], arr_GNSS_poses[idx][5]);
+    //Calculate GNSS transformation
+    Eigen::Quaternionf quaternion_GNSS(arr_GNSS_poses[ind][6], arr_GNSS_poses[ind][3], arr_GNSS_poses[ind][4], arr_GNSS_poses[ind][5]);
     Eigen::Matrix3f init_rotation_GNSS = quaternion_GNSS.normalized().toRotationMatrix();
-    Eigen::Vector4f init_translation_GNSS; init_translation_GNSS << arr_GNSS_poses[idx][0], arr_GNSS_poses[idx][1], arr_GNSS_poses[idx][2], 1.0;
+    Eigen::Vector4f init_translation_GNSS; init_translation_GNSS << arr_GNSS_poses[ind][0], arr_GNSS_poses[ind][1], arr_GNSS_poses[ind][2], 1.0;
 
     Eigen::Matrix4f transform_GNSS;
     transform_GNSS.setIdentity();   // Set to Identity to make bottom row of Matrix 0,0,0,1
@@ -446,9 +486,9 @@ main()
     //Eigen::Matrix4f transform_GNSS = (init_translation_GNSS * init_rotation_GNSS).matrix();
     //Eigen::Matrix4f* transform_GNSS_pointer = &transform_GNSS;
 
-    std::cout << "TEST_1 " << transform_GNSS(0, 3)
-        << " TEST_2 " << transform_GT(1, 3)
-        << " TEST_3 " << transform_GT(2, 2) << std::endl;
+    //std::cout << "TEST_1 " << transform_GNSS(0, 3)
+    //    << " TEST_2 " << transform_GT(1, 3)
+        //   << " TEST_3 " << transform_GT(2, 2) << std::endl;
 
     auto [rse_transl_GNSS, rso_deg_1_GNSS, rso_deg_2_GNSS] = evalMetrics(transform_GNSS, transform_GT);
 
@@ -465,17 +505,17 @@ main()
 
     // Create the CropBox filter
     pcl::CropBox<pcl::PointXYZ> cropBoxFilter;
-    cropBoxFilter.setInputCloud(target_cloud);
     cropBoxFilter.setMin(minPoint);
     cropBoxFilter.setMax(maxPoint);
     cropBoxFilter.setNegative(false);  // Set to "true" to crop the region and keep the points outside
+    cropBoxFilter.setInputCloud(target_cloud);
 
     // Apply the crop filter to obtain the cropped point cloud
     pcl::PointCloud<pcl::PointXYZ>::Ptr croppedTargetCloud(new pcl::PointCloud<pcl::PointXYZ>);
     pcl::copyPointCloud(*target_cloud, *croppedTargetCloud);
     //cropBoxFilter.filter (*croppedTargetCloud);
 
-    std::cout << "Cropped target pc. Contains now " << croppedTargetCloud -> size() << " points." << std::endl;
+    std::cout << "Cropped target pc contains now " << croppedTargetCloud->size() << " points." << std::endl;
 
     // Write to txt.-File
     // 
@@ -490,7 +530,7 @@ main()
     }
 
     // Write data to the file
-    outfile_text << "\n\n" << '#' * 30 << std::endl;
+    outfile_text << "\n\n" << "-------------------------------------------" << std::endl;
     outfile_text << "\n\nSource point cloud:\nTimestamp = " + to_string(timestamps[0]) << std::endl;
     outfile_text << "\nNumber of points = " + to_string(filtered_cloud->size()) << std::endl;
     outfile_text << "Cropped (Y/N)? = N\n\n" << std::endl;
@@ -543,123 +583,356 @@ main()
     ndt.setInputTarget(croppedTargetCloud);
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr output_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+    int counter;
 
-    for (int k = 0; k < 3; k++) {
+    if (bool_1D == true) {
 
-        for (int n = 0; n < number_eval_points[k]; n++) {
-
-            Eigen::Matrix4f transform_init = transform_GT;
-            std::vector<float> eval_points = getElementByIndex(list_eval_points, k);
-
-            std::vector<float> transl(3, 0.0);
-
-            std::cout << "\nNDT Registration for axis ID " << k << " with initial offset " << eval_points[n] << ".\n" << std::endl;
-
+        for (int k = 0; k < 3; k++) {
 
             if (bool_trans == true) {
-                transl[k] = eval_points[n];    // 
-                transform_init(0, 3) = transform_init(0, 3) + transl[0];
-                transform_init(1, 3) = transform_init(1, 3) + transl[1];
-                transform_init(2, 3) = transform_init(2, 3) + transl[2];
+                counter = k;
             }
 
-            auto [rse_transl_init, rso_deg_1_init, rso_deg_2_init] = evalMetrics(transform_init, transform_GT);
-
-            auto start_execution = std::chrono::high_resolution_clock::now();
-
-            // Calculating required rigid transform to align the input cloud to the target cloud.
-            //pcl::PointCloud<pcl::PointXYZ>::Ptr output_cloud(new pcl::PointCloud<pcl::PointXYZ>);
-            ndt.align(*output_cloud, transform_init);
-
-            auto end_execution = std::chrono::high_resolution_clock::now();
-
-            std::chrono::duration<double, std::milli> duration = end_execution - start_execution;
-            double outlier_ratio = ndt.getOulierRatio();
-            double trans_likelihood = ndt.getTransformationLikelihood();
-            double fitness = ndt.getFitnessScore();
-            Eigen::Matrix4f final_transform = ndt.getFinalTransformation();
-            int number_iterations = ndt.getFinalNumIteration();
-
-
-            auto [rse_transl, rso_deg_1, rso_deg_2] = evalMetrics(final_transform, transform_GT);
-
-
-            std::cout << "Normal Distributions Transform has converged:" << ndt.hasConverged()
-                << "\nAfter " << number_iterations << " Iteration(s)."
-                << "\nThe registration took " << (duration.count() / 1000) << " seconds to converge."
-                << "\nFitness score: " << fitness
-                << "\nOutlier ratio: " << outlier_ratio
-                << "\nTransformation likelihood: " << trans_likelihood
-                << "\nTranslation error: " << rse_transl
-                << "\nRelative rotation error 1: " << rso_deg_1
-                << "\nRelative rotation error 2: " << rso_deg_2
-                << std::endl;
-
-            // Open the file in output mode
-            outfile_csv.open(path_csv, std::ios_base::app);
-
-            // Check if the file was opened successfully
-            if (!outfile_csv) {
-                std::cerr << "Error opening csv.-file." << std::endl;
-                return 1;
+            if (bool_rot == true) {
+                counter = k + 3;
             }
 
-            // Write data to the file
-            outfile_csv << ID << ";" << timestamps[0] << ";" << k << ";" << transl[0] << ";" << transl[1] << ";" << transl[2] << ";"
-                << rse_transl_init << ";" << rso_deg_1_init << ";" << rso_deg_2_init << ";" << fitness << ";"
-                << outlier_ratio << ";" << rse_transl << ";" << rso_deg_1 << ";" << rso_deg_2 << ";"
-                << number_iterations << ";" << (duration.count() / 1000) << ";" << rse_transl_GNSS << ";" << rso_deg_1_GNSS << ";" << rso_deg_2_GNSS
-                << std::endl;
+
+            for (int n = 0; n < number_eval_points[counter]; n++) {
+
+                Eigen::Matrix4f transform_init = transform_GT;
+                std::vector<float> eval_points = getElementByIndex(list_eval_points, counter);
+
+                std::vector<float> transl(3, 0.0);
+                std::vector<float> rotl(3, 0.0);
+
+                std::cout << "\nNDT Registration for axis ID " << k << " with initial offset " << eval_points[n] << ".\n" << std::endl;
+
+                std::vector<float> output_offset(3, 0.0);
+
+                if (bool_trans == true) {
+                    transl[k] = eval_points[n];    // 
+                    transform_init(0, 3) = transform_init(0, 3) + transl[0];
+                    transform_init(1, 3) = transform_init(1, 3) + transl[1];
+                    transform_init(2, 3) = transform_init(2, 3) + transl[2];
+
+                    output_offset = transl;
+                }
+
+                if (bool_rot == true) {
+
+                    rotl[k] = eval_points[n];
+
+                    Eigen::Matrix3f Rot_init = transform_init.block<3, 3>(0, 0);
+                    Eigen::Vector3f eulerAngles = Rot_init.eulerAngles(0, 1, 2);
+
+                    for (int w = 0; w < 3; w++) {
+                        eulerAngles[w] = eulerAngles[w] + rotl[w];
+                    }
+
+                    Eigen::Quaternionf quaternion_init;
+                    quaternion_init = Eigen::AngleAxisf(eulerAngles[0], Eigen::Vector3f::UnitX()) *
+                        Eigen::AngleAxisf(eulerAngles[1], Eigen::Vector3f::UnitY()) *
+                        Eigen::AngleAxisf(eulerAngles[2], Eigen::Vector3f::UnitZ());
+
+                    quaternion_init.normalize();
+                    Rot_init = quaternion_init.toRotationMatrix();
+                    transform_init.block<3, 3>(0, 0) = Rot_init;
+
+                    output_offset = rotl;
+
+                }
+
+                auto [rse_transl_init, rso_deg_1_init, rso_deg_2_init] = evalMetrics(transform_init, transform_GT);
+
+                auto start_execution = std::chrono::high_resolution_clock::now();
+
+                // Calculating required rigid transform to align the input cloud to the target cloud.
+                //pcl::PointCloud<pcl::PointXYZ>::Ptr output_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+                ndt.align(*output_cloud, transform_init);
+
+                auto end_execution = std::chrono::high_resolution_clock::now();
+
+                std::chrono::duration<double, std::milli> duration = end_execution - start_execution;
+                double outlier_ratio = ndt.getOulierRatio();
+                double trans_likelihood = ndt.getTransformationLikelihood();
+                double fitness = ndt.getFitnessScore();
+                Eigen::Matrix4f final_transform = ndt.getFinalTransformation();
+                int number_iterations = ndt.getFinalNumIteration();
 
 
-            // Close the file
-            outfile_csv.close();
+                auto [rse_transl, rso_deg_1, rso_deg_2] = evalMetrics(final_transform, transform_GT);
+
+
+                std::cout << "Normal Distributions Transform has converged:" << ndt.hasConverged()
+                    << "\nAfter " << number_iterations << " Iteration(s)."
+                    << "\nThe registration took " << (duration.count() / 1000) << " seconds to converge."
+                    << "\nFitness score: " << fitness
+                    << "\nOutlier ratio: " << outlier_ratio
+                    << "\nTransformation likelihood: " << trans_likelihood
+                    << "\nTranslation error: " << rse_transl
+                    << "\nRelative rotation error 1: " << rso_deg_1
+                    << "\nRelative rotation error 2: " << rso_deg_2
+                    << std::endl;
+
+                // Open the file in output mode
+                outfile_csv.open(path_csv, std::ios_base::app);
+
+                // Check if the file was opened successfully
+                if (!outfile_csv) {
+                    std::cerr << "Error opening csv.-file." << std::endl;
+                    return 1;
+                }
+
+                // Write data to the file
+                outfile_csv << ID << ";" << timestamps[ind] << ";" << k << ";" << output_offset[0] << ";" << output_offset[1] << ";" << output_offset[2] << ";"
+                    << rse_transl_init << ";" << rso_deg_1_init << ";" << rso_deg_2_init << ";" << fitness << ";"
+                    << outlier_ratio << ";" << rse_transl << ";" << rso_deg_1 << ";" << rso_deg_2 << ";"
+                    << number_iterations << ";" << (duration.count() / 1000) << ";" << rse_transl_GNSS << ";" << rso_deg_1_GNSS << ";" << rso_deg_2_GNSS
+                    << std::endl;
+
+
+                // Close the file
+                outfile_csv.close();
+                std::cout << "Data written to csv.-file." << std::endl;
 
 
 
+                // Open the file in output mode
+                outfile_csv_iter.open(path_csv_iter, std::ios_base::app);
+
+                // Check if the file was opened successfully
+                if (!outfile_csv_iter) {
+                    std::cerr << "Error opening csv.-file." << std::endl;
+                    return 1;
+                }
+
+                // Write data to the file
+                outfile_csv_iter << ID << ";" << timestamps[ind] << ";" << k << ";" << eval_points[n] << ";" << number_iterations << ";" << fitness << ";"
+                    << final_transform(0, 0) << ";" << final_transform(0, 1) << ";" << final_transform(0, 2) << ";" << final_transform(0, 3) << ";"
+                    << final_transform(1, 0) << ";" << final_transform(1, 1) << ";" << final_transform(1, 2) << ";" << final_transform(1, 3) << ";"
+                    << final_transform(2, 0) << ";" << final_transform(2, 1) << ";" << final_transform(2, 2) << ";" << final_transform(2, 3) << ";"
+                    << final_transform(3, 0) << ";" << final_transform(3, 1) << ";" << final_transform(3, 2) << ";" << final_transform(3, 3) << ";"
+                    << std::endl;
+
+                // Close the file
+                outfile_csv_iter.close();
+                std::cout << "Data written to csv-iter.-file." << std::endl;
+
+
+
+
+
+            }
+            Sleep(3);
 
         }
+        std::cout << "Timestamp completed!" << std::endl;
+        input_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        source_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        output_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        filtered_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        target_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        croppedTargetCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        //idx++;
+        Sleep(3);
+        std::cout << "PC variables reseted!" << std::endl;
+        //std::cout << idx << std::endl;
+
 
     }
 
+    if (bool_2D == true) {
+
+        std::vector<float> list_axes(3, 0.0);
+
+
+        for (int k = 0; k < number_eval_points[axis2Deval[0]]; k++) {
+
+            list_axes[axis2Deval[0]] = getElementByIndex(list_eval_points, axis2Deval[0])[k];
+
+
+
+            for (int n = 0; n < number_eval_points[axis2Deval[1]]; n++) {
+
+                list_axes[axis2Deval[1]] = getElementByIndex(list_eval_points, axis2Deval[1])[n];
+
+                Eigen::Matrix4f transform_init = transform_GT;
+          
+
+                std::cout << "\nNDT Registration for axis_1 ID " << axis2Deval[0] << " with initial offset " << list_axes[0] 
+                    << " and axis_2 ID " << axis2Deval[1] << " with initial offset " << list_axes[1] << ".\n" << std::endl;
+
+
+                if (bool_trans == true) {
+                    transform_init(0, 3) = transform_init(0, 3) + list_axes[0];
+                    transform_init(1, 3) = transform_init(1, 3) + list_axes[1];
+                    transform_init(2, 3) = transform_init(2, 3) + list_axes[2];
+
+                }
+
+                if (bool_rot == true) {
+
+                    Eigen::Matrix3f Rot_init = transform_init.block<3, 3>(0, 0);
+                    Eigen::Vector3f eulerAngles = Rot_init.eulerAngles(0, 1, 2);
+
+                    for (int w = 0; w < 3; w++) {
+                        eulerAngles[w] = eulerAngles[w] + list_axes[w];
+                    }
+
+                    Eigen::Quaternionf quaternion_init;
+                    quaternion_init = Eigen::AngleAxisf(eulerAngles[0], Eigen::Vector3f::UnitX()) *
+                        Eigen::AngleAxisf(eulerAngles[1], Eigen::Vector3f::UnitY()) *
+                        Eigen::AngleAxisf(eulerAngles[2], Eigen::Vector3f::UnitZ());
+
+                    quaternion_init.normalize();
+                    Rot_init = quaternion_init.toRotationMatrix();
+                    transform_init.block<3, 3>(0, 0) = Rot_init;
+
+                }
+
+                auto [rse_transl_init, rso_deg_1_init, rso_deg_2_init] = evalMetrics(transform_init, transform_GT);
+
+                auto start_execution = std::chrono::high_resolution_clock::now();
+
+                // Calculating required rigid transform to align the input cloud to the target cloud.
+                //pcl::PointCloud<pcl::PointXYZ>::Ptr output_cloud(new pcl::PointCloud<pcl::PointXYZ>);
+                ndt.align(*output_cloud, transform_init);
+
+                auto end_execution = std::chrono::high_resolution_clock::now();
+
+                std::chrono::duration<double, std::milli> duration = end_execution - start_execution;
+                double outlier_ratio = ndt.getOulierRatio();
+                double trans_likelihood = ndt.getTransformationLikelihood();
+                double fitness = ndt.getFitnessScore();
+                Eigen::Matrix4f final_transform = ndt.getFinalTransformation();
+                int number_iterations = ndt.getFinalNumIteration();
+
+
+                auto [rse_transl, rso_deg_1, rso_deg_2] = evalMetrics(final_transform, transform_GT);
+
+
+                std::cout << "Normal Distributions Transform has converged:" << ndt.hasConverged()
+                    << "\nAfter " << number_iterations << " Iteration(s)."
+                    << "\nThe registration took " << (duration.count() / 1000) << " seconds to converge."
+                    << "\nFitness score: " << fitness
+                    << "\nOutlier ratio: " << outlier_ratio
+                    << "\nTransformation likelihood: " << trans_likelihood
+                    << "\nTranslation error: " << rse_transl
+                    << "\nRelative rotation error 1: " << rso_deg_1
+                    << "\nRelative rotation error 2: " << rso_deg_2
+                    << std::endl;
+
+                // Open the file in output mode
+                outfile_csv.open(path_csv, std::ios_base::app);
+
+                // Check if the file was opened successfully
+                if (!outfile_csv) {
+                    std::cerr << "Error opening csv.-file." << std::endl;
+                    return 1;
+                }
+
+                // Write data to the file
+                outfile_csv << ID << ";" << timestamps[ind] << ";" << k << ";" << list_axes[0] <<  ";" << list_axes[1] << ";" << list_axes[2] << ";"
+                    << rse_transl_init << ";" << rso_deg_1_init << ";" << rso_deg_2_init << ";" << fitness << ";"
+                    << outlier_ratio << ";" << rse_transl << ";" << rso_deg_1 << ";" << rso_deg_2 << ";"
+                    << number_iterations << ";" << (duration.count() / 1000) << ";" << rse_transl_GNSS << ";" << rso_deg_1_GNSS << ";" << rso_deg_2_GNSS
+                    << std::endl;
+
+
+                // Close the file
+                outfile_csv.close();
+                std::cout << "Data written to csv.-file." << std::endl;
+
+
+
+                // Open the file in output mode
+                outfile_csv_iter.open(path_csv_iter, std::ios_base::app);
+
+                // Check if the file was opened successfully
+                if (!outfile_csv_iter) {
+                    std::cerr << "Error opening csv.-file." << std::endl;
+                    return 1;
+                }
+
+                // Write data to the file
+                outfile_csv_iter << ID << ";" << timestamps[ind] << ";" << k << ";" << axis2Deval[0] << "," << axis2Deval[1] << ";" << number_iterations << ";" << fitness << ";"
+                    << final_transform(0, 0) << ";" << final_transform(0, 1) << ";" << final_transform(0, 2) << ";" << final_transform(0, 3) << ";"
+                    << final_transform(1, 0) << ";" << final_transform(1, 1) << ";" << final_transform(1, 2) << ";" << final_transform(1, 3) << ";"
+                    << final_transform(2, 0) << ";" << final_transform(2, 1) << ";" << final_transform(2, 2) << ";" << final_transform(2, 3) << ";"
+                    << final_transform(3, 0) << ";" << final_transform(3, 1) << ";" << final_transform(3, 2) << ";" << final_transform(3, 3) << ";"
+                    << std::endl;
+
+                // Close the file
+                outfile_csv_iter.close();
+                std::cout << "Data written to csv-iter.-file." << std::endl;
+
+
+
+
+
+            }
+            Sleep(3);
+
+        }
+        std::cout << "Timestamp completed!" << std::endl;
+        input_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        source_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        output_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        filtered_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        target_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        croppedTargetCloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+        //idx++;
+        Sleep(3);
+        std::cout << "PC variables reseted!" << std::endl;
+        //std::cout << idx << std::endl;
+
+
+
+
+    }
+
+
     
 
+    //std::cout << idx << std::endl;
+    
 
     // Transforming unfiltered, input cloud using found transform.
-    pcl::transformPointCloud(*input_cloud, *output_cloud, ndt.getFinalTransformation());
+    //pcl::transformPointCloud(*input_cloud, *output_cloud, ndt.getFinalTransformation());
 
     // Saving transformed input cloud.
-    pcl::io::savePCDFileASCII("room_scan2_transformed.pcd", *output_cloud);
+    //pcl::io::savePCDFileASCII("room_scan2_transformed.pcd", *output_cloud);
 
     // Initializing point cloud visualizer
-    pcl::visualization::PCLVisualizer::Ptr
-    viewer_final(new pcl::visualization::PCLVisualizer("3D Viewer"));
-    viewer_final->setBackgroundColor(0, 0, 0);
+    //pcl::visualization::PCLVisualizer::Ptr
+    //viewer_final(new pcl::visualization::PCLVisualizer("3D Viewer"));
+    //viewer_final->setBackgroundColor(0, 0, 0);
 
     // Coloring and visualizing target cloud (red).
-    pcl::visualization::PointCloudColorHandlerCustom < pcl::PointXYZ>
-    target_color(croppedTargetCloud, 255, 0, 0);
-    viewer_final->addPointCloud<pcl::PointXYZ>(croppedTargetCloud, target_color, "target cloud");
-    viewer_final->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                                  1, "target cloud");
+    //pcl::visualization::PointCloudColorHandlerCustom < pcl::PointXYZ>
+    //target_color(croppedTargetCloud, 255, 0, 0);
+    //viewer_final->addPointCloud<pcl::PointXYZ>(croppedTargetCloud, target_color, "target cloud");
+    //viewer_final->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
+    //                                              1, "target cloud");
 
     // Coloring and visualizing transformed input cloud (green).
-    pcl::visualization::PointCloudColorHandlerCustom < pcl::PointXYZ>
-    output_color(output_cloud, 0, 255, 0);
-    viewer_final->addPointCloud<pcl::PointXYZ>(output_cloud, output_color, "output cloud");
-    viewer_final->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
-                                                  1, "output cloud");
+    //pcl::visualization::PointCloudColorHandlerCustom < pcl::PointXYZ>
+    //output_color(output_cloud, 0, 255, 0);
+    //viewer_final->addPointCloud<pcl::PointXYZ>(output_cloud, output_color, "output cloud");
+    //viewer_final->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,
+    //                                              1, "output cloud");
 
     // Starting visualizer
     //viewer_final->addCoordinateSystem(1.0, "global");
     //viewer_final->initCameraParameters();
 
     // Wait until visualizer window is closed.
-    while (!viewer_final->wasStopped())
-    {
-        viewer_final->spinOnce(100);
-        std::this_thread::sleep_for(100ms);
-    }
+    //while (!viewer_final->wasStopped())
+    //{
+    //    viewer_final->spinOnce(100);
+    //    std::this_thread::sleep_for(100ms);
+    //}
 
     return (0);
 }

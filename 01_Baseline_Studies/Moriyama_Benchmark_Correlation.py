@@ -15,7 +15,7 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 import os
 
-Idx_timestamp = 1
+Idx_timestamp = 0
 Idx_axis = 0
 
 # Your choice
@@ -40,9 +40,9 @@ if all_timestamps == True:
 #        Idx_axis = j
 
 title = "Correlation of evaluation metrics on Moriyama Dataset\nTimestamp ID: " + str(Idx_timestamp) + ", Axis ID: " + str(Idx_axis)
-name = 'C023_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
+name = 'C003_B_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
 
-path = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C020_TranslXYBaselineICPMoriyama.csv"
+path = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C003_TranslBaselineICPMoriyama.csv"
 path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\Plots"
 
 #Load GT poses from csv
@@ -81,5 +81,5 @@ plt.figure(figsize = (10,8))
 ax = sn.heatmap(corr_matrix, annot=True, mask = matrix, linewidth=.5, cmap=sn.cubehelix_palette(as_cmap=True), square = True, vmin=-1, vmax=1)
 plt.title(title, fontsize = 15)
 plt.tight_layout()
-#plt.savefig(os.path.join(path_plots, name))
+plt.savefig(os.path.join(path_plots, name))
 plt.show()
