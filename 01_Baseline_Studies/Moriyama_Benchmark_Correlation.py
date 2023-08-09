@@ -15,14 +15,14 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 import os
 
-Idx_timestamp = 0
+Idx_timestamp = 1
 Idx_axis = 0
 
 # Your choice
 one_axis = False
 all_axes = True
-one_timestamp = False
-all_timestamps = True
+one_timestamp = True
+all_timestamps = False
 
 if all_axes == True:
     Idx_axis = -1
@@ -40,9 +40,9 @@ if all_timestamps == True:
 #        Idx_axis = j
 
 title = "Correlation of evaluation metrics on Moriyama Dataset\nTimestamp ID: " + str(Idx_timestamp) + ", Axis ID: " + str(Idx_axis)
-name = 'C003_B_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
+name = 'C110_B_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
 
-path = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C003_TranslBaselineICPMoriyama.csv"
+path = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C110_RotlBaselineICPMoriyama.csv"
 path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\Plots"
 
 #Load GT poses from csv
@@ -72,9 +72,9 @@ corr_categories = ["Fitness", "RMSE Inliers", "Number Iterations", "Initial Tran
 df_corr = df[corr_categories]
 df_corr.fillna(0)
 df_corr.astype('float64').dtypes
-print(df_corr[["Initial Rot. Error 1 [°]"]])
+#print(df_corr[["Initial Rot. Error 1 [°]"]])
 
-corr_matrix = df_corr.corr().fillna(0.0)
+corr_matrix = df_corr.corr()           #.fillna(0.0)
 matrix = np.triu(np.ones_like(corr_matrix))
 
 plt.figure(figsize = (10,8))

@@ -29,7 +29,7 @@ path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03
 
 Idx_timestamp = 1
 Idx_axis = 2  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
-Idx_init = 4 # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
+Idx_init = 1 # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
 
 #Load GT poses from csv
 df_GT = pd.read_csv(path_GT_csv, delimiter = ',', header = 0)
