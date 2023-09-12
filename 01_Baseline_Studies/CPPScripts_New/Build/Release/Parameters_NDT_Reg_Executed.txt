@@ -82,3 +82,14 @@ true;false;false;true;false;C233_TS01;1;_TranslXYYaw;0.001;1.0;1.0;30
 true;false;false;true;false;C233_TS02;2;_TranslXYYaw;0.001;1.0;1.0;30
 true;false;false;true;false;C233_TS03;3;_TranslXYYaw;0.001;1.0;1.0;30
 true;false;false;true;false;C233_TS04;4;_TranslXYYaw;0.001;1.0;1.0;30
+
+true;true;false;false;false;C200_TS00_Big;0;_Transl;0.001;0.1;1.0;30
+true;true;false;false;false;C200_TS01_Big;1;_Transl;0.001;0.1;1.0;30
+true;true;false;false;false;C200_TS02_Big;2;_Transl;0.001;0.1;1.0;30
+true;true;false;false;false;C200_TS03_Big;3;_Transl;0.001;0.1;1.0;30
+true;true;false;false;false;C200_TS04_Big;4;_Transl;0.001;0.1;1.0;30
+false;true;false;false;false;C210_TS00_Big;0;_Rotl;0.001;0.1;1.0;30
+false;true;false;false;false;C210_TS01_Big;1;_Rotl;0.001;0.1;1.0;30
+false;true;false;false;false;C210_TS02_Big;2;_Rotl;0.001;0.1;1.0;30
+false;true;false;false;false;C210_TS03_Big;3;_Rotl;0.001;0.1;1.0;30
+false;true;false;false;false;C210_TS04_Big;4;_Rotl;0.001;0.1;1.0;30

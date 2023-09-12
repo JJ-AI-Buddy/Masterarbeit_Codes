@@ -15,14 +15,17 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 import os
 
-Idx_timestamp = 1
+Idx_timestamp = 0
 Idx_axis = 0
 
+
 # Your choice
-one_axis = False
-all_axes = True
-one_timestamp = True
-all_timestamps = False
+one_axis = True
+all_axes = False
+one_timestamp = False
+all_timestamps = True
+
+NDT = True
 
 if all_axes == True:
     Idx_axis = -1
@@ -40,15 +43,21 @@ if all_timestamps == True:
 #        Idx_axis = j
 
 title = "Correlation of evaluation metrics on Moriyama Dataset\nTimestamp ID: " + str(Idx_timestamp) + ", Axis ID: " + str(Idx_axis)
-name = 'C110_B_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
+name = 'C210_B_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
 
-path = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C110_RotlBaselineICPMoriyama.csv"
+path = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C210_RotlBaselineNDTMoriyama.csv"
 path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\Plots"
 
 #Load GT poses from csv
 df = pd.read_csv(path, delimiter = ';', header = 0, engine = 'python', encoding = 'unicode_escape')
 
-df = df[["ID", "Timestamp GT Pose", "Axis", "Initial Transl. Error [m]", "Initial Rot. Error 1 [°]", "Fitness", "RMSE Inliers", "Transl. Error [m]", "Rot. Error 1 [°]", "Number Iterations"]]
+if NDT == False:
+    categories = ["ID", "Timestamp GT Pose", "Axis", "Initial Transl. Error [m]", "Initial Rot. Error 1 [°]", "Fitness", "RMSE Inliers", "Transl. Error [m]", "Rot. Error 1 [°]", "Number Iterations"]
+else:
+    categories = ["ID", "Timestamp GT Pose", "Axis", "Initial Transl. Error [m]", "Initial Rot. Error 1 [°]", "Fitness", "Transl. Error [m]", "Rot. Error 1 [°]", "Number Iterations"]
+
+
+df = df[categories]
 
 timestamps = df.groupby('Timestamp GT Pose').groups.keys()
 axes = df.groupby('Axis').groups.keys()
@@ -66,8 +75,12 @@ if one_axis == True:
     df = df.loc[df ['Axis'] == axis]  
 else: pass
 
+if NDT == False:
+    corr_categories = ["Fitness", "RMSE Inliers", "Number Iterations", "Initial Transl. Error [m]", "Transl. Error [m]", "Initial Rot. Error 1 [°]", "Rot. Error 1 [°]"]
+else:
+    corr_categories = ["Fitness", "Number Iterations", "Initial Transl. Error [m]", "Transl. Error [m]", "Initial Rot. Error 1 [°]", "Rot. Error 1 [°]"]
 
-corr_categories = ["Fitness", "RMSE Inliers", "Number Iterations", "Initial Transl. Error [m]", "Transl. Error [m]", "Initial Rot. Error 1 [°]", "Rot. Error 1 [°]"]
+
 
 df_corr = df[corr_categories]
 df_corr.fillna(0)

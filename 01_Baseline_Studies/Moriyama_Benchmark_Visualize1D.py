@@ -19,8 +19,8 @@ io.renderers.default='svg'
 
 
 ######################### INPUT/SETTINGS #####################################################
-Idx_timestamp = 4
-Idx_axis = 2 #0 = x, 1 = y, 2 = z
+Idx_timestamp = 3
+Idx_axis = 1 #0 = x, 1 = y, 2 = z
 
 # Your choice
 one_axis = True
@@ -44,9 +44,9 @@ if all_timestamps == True:
 else: one_timestamp = True
 
 
-file_name = "\C211_RotlBaselineNDTMoriyama.csv"       #File name must be given with a backslash in front: "\xxxx"
+file_name = "\C203_TranslBaselineNDTMoriyama.csv"       #File name must be given with a backslash in front: "\xxxx"
 title = "Evaluation of 1D initial pose perturbation on Moriyama Dataset\n - Timestamp ID: " + str(Idx_timestamp) + ", Axis ID: " + str(Idx_axis)
-name = '1D_C211_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
+name = '1D_C103_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
 
 #######################################################################################################################
 
@@ -83,6 +83,16 @@ if one_timestamp == True:
 
     df = df.loc[df['Timestamp GT Pose'] == tstamp]
     df_data = df
+    
+    mean_execut = np.mean(df_data['Execut. Time [s]'] / df_data['Number Iterations'])*1000 
+    std_execut = np.std(df_data['Execut. Time [s]'] / df_data['Number Iterations'])*1000 
+    max_execut = np.max(df_data['Execut. Time [s]'] / df_data['Number Iterations'])*1000  
+    min_execut =  np.min(df_data['Execut. Time [s]'] / df_data['Number Iterations'])*1000
+
+    print('Mean execution time per iteration: %f ms/Iteration' %mean_execut) 
+    print('With standard deviation: %f ms/Iteration' %std_execut) 
+    print('With max value: %f ms/Iteration' %max_execut)  
+    print('With min value: %f ms/Iteration' %min_execut) 
 else: pass
 
 if one_axis == True:
@@ -97,6 +107,16 @@ if all_timestamps == True:
     feature_list = ['Timestamp GT Pose','Number Iterations', 'Execut. Time [s]', 'Rot. Error 1 [°]', 'Initial Rot. Error 1 [°]',
                  'GNSS Transl. Error[m]', 'GNSS Rot. Error 1 [°]', 'Initial Transl. Error [m]', 'Transl. Error [m]' ]
     df_new = df[feature_list]
+    
+    mean_execut = np.mean(df_new['Execut. Time [s]'] / df_new['Number Iterations'])*1000 
+    std_execut = np.std(df_new['Execut. Time [s]'] / df_new['Number Iterations'])*1000 
+    max_execut = np.max(df_new['Execut. Time [s]'] / df_new['Number Iterations'])*1000  
+    min_execut =  np.min(df_new['Execut. Time [s]'] / df_new['Number Iterations'])*1000
+
+    print('Mean execution time per iteration: %f ms/Iteration' %mean_execut) 
+    print('With standard deviation: %f ms/Iteration' %std_execut) 
+    print('With max value: %f ms/Iteration' %max_execut)  
+    print('With min value: %f ms/Iteration' %min_execut) 
     
     #Check if angle is >90° and subtract 180°
     df_new = df_new.reset_index()
@@ -167,7 +187,9 @@ if all_timestamps == True:
              #labels={'pop':'population of Canada'},
              #height=400
              #)
-             
+#del df_data[df_data.columns[0]]
+#df_data.dtypes
+#df_data = df_data.astype(float) 
 ### PLOTTING ###            
 #Create figure with secondary axis
 fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -611,5 +633,5 @@ fig.update_layout(font=dict(size=11 ),
 #fig.update_yaxes(range=[None, max_y_value], rangebreaks = [enabled = False, name = 'Test'])
 #fig.update_traces(selector={"name": "Rotation Error in °"},cliponaxis = True)
 #fig.update_yaxes(rangebreaks=[dict(enabled = False)])
-fig.write_image(os.path.join(path_plots,name))
+#fig.write_image(os.path.join(path_plots,name))
 fig.show()

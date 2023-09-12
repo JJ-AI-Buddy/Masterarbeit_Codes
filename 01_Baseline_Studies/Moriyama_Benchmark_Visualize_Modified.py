@@ -30,12 +30,12 @@ path_map = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Mori
 path_GT_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\14_Local_Pose.csv"
 path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation"
 
-path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C110_BigRotStepsBaselineICPMoriyama.csv"
+path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C110_IterStepsBaselineICPMoriyama.csv"
 
-Idx_timestamp = 1
-Idx_axis = 2  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
-Idx_init = 0 # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
-Value_init = '-90 °' #If known please add the value as string (value + unit)
+Idx_timestamp = 0
+Idx_axis = 0  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
+Idx_init = 9 # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
+Value_init = '+ 5,72 °' #If known please add the value as string (value + unit)
 
 #Load GT poses from csv
 df_GT = pd.read_csv(path_GT_csv, delimiter = ',', header = 0)

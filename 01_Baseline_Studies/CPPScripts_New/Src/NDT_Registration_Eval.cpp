@@ -230,10 +230,10 @@ main()
         }
 
 
-        float lower_limits[6] = { -2,-2,-2,-M_PI / 4,-M_PI / 4, -M_PI / 4 };
-        float upper_limits[6] = { 2,2,2,M_PI / 4, M_PI / 4, M_PI / 4 };
+        float lower_limits[6] = { -50, -50, 0, -M_PI / 2, -M_PI / 2, -M_PI / 2 }; //{ -2,-2,-2,-M_PI / 4,-M_PI / 4, -M_PI / 4 };
+        float upper_limits[6] = { 50,50,0.01, M_PI / 2,M_PI / 2,M_PI / 2 }; //{ 2,2,2,M_PI / 4, M_PI / 4, M_PI / 4 };
 
-        int number_eval_points[6] = { 17,17,17,17,17,17 };    // 6 axes
+        int number_eval_points[6] = { 21,21,2,10,10,10 };//{ 17,17,17,17,17,17 };    // 6 axes
         int size_eval_points = sizeof(number_eval_points) / sizeof(number_eval_points[0]);
 
         int axis2Deval[3] = { 0, 1, 5 };
