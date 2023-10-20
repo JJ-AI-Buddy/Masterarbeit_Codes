@@ -1,0 +1,853 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "ndt_reg_ownData.exe"
+		},
+		{
+			"path" : "ndt_reg_ownData.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"link_directories",
+			"target_link_libraries",
+			"set_target_properties",
+			"include",
+			"find_package",
+			"find_VTK",
+			"find_external_library",
+			"set_property",
+			"boost_find_component",
+			"find_boost",
+			"add_definitions",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt",
+			"C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/VTK-targets.cmake",
+			"C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/vtk-config.cmake",
+			"C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake",
+			"C:/Program Files/PCL 1.13.1/3rdParty/Boost/lib/cmake/boost_filesystem-1.82.0/libboost_filesystem-variant-vc143-mt-gd-x64-1_82-static.cmake",
+			"C:/Program Files/PCL 1.13.1/3rdParty/Boost/lib/cmake/boost_filesystem-1.82.0/boost_filesystem-config.cmake",
+			"C:/Program Files/PCL 1.13.1/3rdParty/Boost/lib/cmake/Boost-1.82.0/BoostConfig.cmake",
+			"C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.26/Modules/FindBoost.cmake",
+			"C:/Program Files/PCL 1.13.1/3rdParty/Boost/lib/cmake/boost_iostreams-1.82.0/boost_iostreams-config.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 5,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 8,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 3,
+				"parent" : 0
+			},
+			{
+				"file" : 3,
+				"parent" : 4
+			},
+			{
+				"command" : 7,
+				"file" : 3,
+				"line" : 546,
+				"parent" : 5
+			},
+			{
+				"command" : 6,
+				"file" : 3,
+				"line" : 316,
+				"parent" : 6
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 267,
+				"parent" : 7
+			},
+			{
+				"file" : 2,
+				"parent" : 8
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 138,
+				"parent" : 9
+			},
+			{
+				"file" : 1,
+				"parent" : 10
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 421,
+				"parent" : 11
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 412,
+				"parent" : 11
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 712,
+				"parent" : 11
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 144,
+				"parent" : 11
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 605,
+				"parent" : 11
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 94,
+				"parent" : 11
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 574,
+				"parent" : 11
+			},
+			{
+				"command" : 7,
+				"file" : 3,
+				"line" : 549,
+				"parent" : 5
+			},
+			{
+				"command" : 10,
+				"file" : 3,
+				"line" : 294,
+				"parent" : 19
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 125,
+				"parent" : 20
+			},
+			{
+				"file" : 7,
+				"parent" : 21
+			},
+			{
+				"command" : 5,
+				"file" : 7,
+				"line" : 594,
+				"parent" : 22
+			},
+			{
+				"file" : 6,
+				"parent" : 23
+			},
+			{
+				"command" : 9,
+				"file" : 6,
+				"line" : 262,
+				"parent" : 24
+			},
+			{
+				"command" : 5,
+				"file" : 6,
+				"line" : 141,
+				"parent" : 25
+			},
+			{
+				"file" : 5,
+				"parent" : 26
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 53,
+				"parent" : 27
+			},
+			{
+				"file" : 4,
+				"parent" : 28
+			},
+			{
+				"command" : 8,
+				"file" : 4,
+				"line" : 104,
+				"parent" : 29
+			},
+			{
+				"command" : 8,
+				"file" : 5,
+				"line" : 103,
+				"parent" : 27
+			},
+			{
+				"command" : 9,
+				"file" : 6,
+				"line" : 262,
+				"parent" : 24
+			},
+			{
+				"command" : 5,
+				"file" : 6,
+				"line" : 141,
+				"parent" : 32
+			},
+			{
+				"file" : 8,
+				"parent" : 33
+			},
+			{
+				"command" : 8,
+				"file" : 8,
+				"line" : 103,
+				"parent" : 34
+			},
+			{
+				"command" : 8,
+				"file" : 8,
+				"line" : 103,
+				"parent" : 34
+			},
+			{
+				"command" : 11,
+				"file" : 0,
+				"line" : 6,
+				"parent" : 0
+			},
+			{
+				"command" : 12,
+				"file" : 0,
+				"line" : 4,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/arch:AVX2"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 37,
+					"define" : "BOOST_ALL_NO_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BOOST_ATOMIC_NO_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BOOST_BZIP2_NO_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BOOST_FILESYSTEM_NO_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BOOST_IOSTREAMS_NO_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BOOST_SERIALIZATION_NO_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BOOST_SYSTEM_NO_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "BOOST_ZLIB_NO_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "KISSFFT_DLL_IMPORT=1"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__SSE2__"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__SSE3__"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__SSE4_1__"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__SSE4_2__"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__SSE__"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__SSSE3__"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "kiss_fft_scalar=double"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 38,
+					"isSystem" : true,
+					"path" : "C:/Program Files/PCL 1.13.1/include/pcl-1.13"
+				},
+				{
+					"backtrace" : 38,
+					"isSystem" : true,
+					"path" : "C:/Program Files/PCL 1.13.1/3rdParty/Eigen/eigen3"
+				},
+				{
+					"backtrace" : 38,
+					"isSystem" : true,
+					"path" : "C:/Program Files/PCL 1.13.1/3rdParty/Boost/include/boost-1_82"
+				},
+				{
+					"backtrace" : 38,
+					"isSystem" : true,
+					"path" : "C:/Program Files/OpenNI2/Include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "C:/Program Files/PCL 1.13.1/3rdParty/VTK/include/vtk-9.2"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "C:/Program Files/PCL 1.13.1/3rdParty/VTK/include/vtk-9.2/vtknlohmannjson/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "C:/Program Files/PCL 1.13.1/3rdParty/VTK/include/vtk-9.2/vtkfreetype/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "C:/Program Files/PCL 1.13.1/3rdParty/FLANN/include"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"id" : "ndt_reg_ownData::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "/machine:x64 /debug /INCREMENTAL /subsystem:console",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-LIBPATH:C:\\PROGRA~1\\PCL113~1.1\\lib",
+				"role" : "libraryPath"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_surfaced.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_keypointsd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_trackingd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_recognitiond.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_stereod.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_outofcored.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_peopled.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_system-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_filesystem-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_iostreams-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_serialization-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\OpenNI2\\Lib\\OpenNI2.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\FLANN\\lib\\flann_cpp_s.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_registrationd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_segmentationd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_featuresd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_filtersd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_sample_consensusd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_mld.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_visualizationd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_searchd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_kdtreed.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_iod.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_octreed.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\OpenNI2\\Lib\\OpenNI2.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkChartsCore-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkInteractionImage-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkIOGeometry-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkIOPLY-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingLOD-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkViewsContext2D-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkViewsCore-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkInteractionWidgets-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkFiltersModeling-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkInteractionStyle-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkFiltersExtraction-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkIOLegacy-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkIOCore-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingAnnotation-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkIOImage-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingContextOpenGL2-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingContext2D-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingFreeType-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 12,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkfreetype-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkzlib-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingOpenGL2-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingHyperTreeGrid-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkImagingSources-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkImagingCore-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingUI-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkRenderingCore-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkCommonColor-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkFiltersGeometry-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkFiltersSources-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkFiltersGeneral-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkCommonComputationalGeometry-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkFiltersCore-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkCommonExecutionModel-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkCommonDataModel-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkCommonMisc-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkCommonTransforms-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkCommonMath-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 15,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkkissfft-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkCommonCore-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtksys-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "ws2_32.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "dbghelp.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "psapi.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\VTK\\lib\\vtkglew-9.2-gd.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "opengl32.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\lib\\pcl_commond.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_system-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_filesystem-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 30,
+				"fragment" : "bcrypt.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 30,
+				"fragment" : "synchronization.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 30,
+				"fragment" : "bcrypt.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 30,
+				"fragment" : "synchronization.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 31,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_atomic-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_iostreams-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 35,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_bzip2-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 36,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_zlib-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "\"C:\\Program Files\\PCL 1.13.1\\3rdParty\\Boost\\lib\\libboost_serialization-vc143-mt-gd-x64-1_82.lib\"",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "ndt_reg_ownData",
+	"nameOnDisk" : "ndt_reg_ownData.exe",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "NDT_Registration_Eval_ownData.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

@@ -1,0 +1,10 @@
+^C:\USERS\JOHANNA\ONEDRIVE - BWEDU\MASTERARBEIT_OSU\PYTHONSCRIPTS\MASTERARBEIT_CODES\02_EVALUATIONS\CPPSCRIPTS_NEW\SRC\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Src" "-BC:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build" --check-stamp-file "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

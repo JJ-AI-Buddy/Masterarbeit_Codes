@@ -1,0 +1,10 @@
+^C:\USERS\JOHANNA\ONEDRIVE - BWEDU\MASTERARBEIT_OSU\PYTHONSCRIPTS\MASTERARBEIT_CODES\03_PROCESSING_PIPELINE\CPPSCRIPTS_NEW\BUILD\CMAKEFILES\708BE721F153FFD2075DAD07C013DE5B\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/03_Processing_Pipeline/CPPScripts_New/Src" "-BC:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/03_Processing_Pipeline/CPPScripts_New/Build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/03_Processing_Pipeline/CPPScripts_New/Build/OWN_PROCESSING_Project.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

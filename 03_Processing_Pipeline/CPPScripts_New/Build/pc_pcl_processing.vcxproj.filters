@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Pythonscripts\Masterarbeit_Codes\03_Processing_Pipeline\CPPScripts_New\Src\PC_Processing_PCL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Pythonscripts\Masterarbeit_Codes\03_Processing_Pipeline\CPPScripts_New\Src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A3DD19D4-BFAD-3219-94F5-9C32F9B618F5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

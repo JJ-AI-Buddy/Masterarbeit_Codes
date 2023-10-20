@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+project(OWN_DATA_Project)
+find_package(PCL 1.13.1 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+add_executable(ndt_reg_ownData NDT_Registration_Eval_ownData_NEW.cpp)
+target_link_libraries(ndt_reg_ownData ${PCL_LIBRARIES})

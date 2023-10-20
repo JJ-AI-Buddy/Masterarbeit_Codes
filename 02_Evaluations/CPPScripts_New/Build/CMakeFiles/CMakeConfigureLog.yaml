@@ -1,0 +1,404 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineSystem.cmake:211 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Windows - 10.0.19045 - AMD64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild version 17.6.3+07e294721 for .NET Framework
+      Der Buildvorgang wurde am 14.09.2023 21:47:52 gestartet.
+      
+      Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\3.27.0-rc3\\CompilerIdC\\CompilerIdC.vcxproj" auf Knoten "1" (Standardziele).
+      PrepareForBuild:
+        Das Verzeichnis "Debug\\" wird erstellt.
+        Das Verzeichnis "Debug\\CompilerIdC.tlog\\" wird erstellt.
+      InitializeBuildStatus:
+        "Debug\\CompilerIdC.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TC /FC /errorReport:queue CMakeCCompilerId.c
+        CMakeCCompilerId.c
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
+        CompilerIdC.vcxproj -> C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\3.27.0-rc3\\CompilerIdC\\CompilerIdC.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_C_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Die Datei "Debug\\CompilerIdC.tlog\\unsuccessfulbuild" wird gel”scht.
+        Aktualisieren des Timestamps von "Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate".
+      Die Erstellung von Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\3.27.0-rc3\\CompilerIdC\\CompilerIdC.vcxproj" ist abgeschlossen (Standardziele).
+      
+      Der Buildvorgang wurde erfolgreich ausgef\xc2\x81hrt.
+          0 Warnung(en)
+          0 Fehler
+      
+      Verstrichene Zeit 00:00:01.22
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+      
+      The C compiler identification is MSVC, found in:
+        C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/3.27.0-rc3/CompilerIdC/CompilerIdC.exe
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      MSBuild version 17.6.3+07e294721 for .NET Framework
+      Der Buildvorgang wurde am 14.09.2023 21:47:54 gestartet.
+      
+      Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\3.27.0-rc3\\CompilerIdCXX\\CompilerIdCXX.vcxproj" auf Knoten "1" (Standardziele).
+      PrepareForBuild:
+        Das Verzeichnis "Debug\\" wird erstellt.
+        Das Verzeichnis "Debug\\CompilerIdCXX.tlog\\" wird erstellt.
+      InitializeBuildStatus:
+        "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TP /FC /errorReport:queue CMakeCXXCompilerId.cpp
+        CMakeCXXCompilerId.cpp
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
+        CompilerIdCXX.vcxproj -> C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\3.27.0-rc3\\CompilerIdCXX\\CompilerIdCXX.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_CXX_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Die Datei "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild" wird gel”scht.
+        Aktualisieren des Timestamps von "Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate".
+      Die Erstellung von Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\3.27.0-rc3\\CompilerIdCXX\\CompilerIdCXX.vcxproj" ist abgeschlossen (Standardziele).
+      
+      Der Buildvorgang wurde erfolgreich ausgef\xc2\x81hrt.
+          0 Warnung(en)
+          0 Fehler
+      
+      Verstrichene Zeit 00:00:00.86
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+      
+      The CXX compiler identification is MSVC, found in:
+        C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/3.27.0-rc3/CompilerIdCXX/CompilerIdCXX.exe
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-kgo6lx"
+      binary: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-kgo6lx"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-kgo6lx'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_d02fa.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Der Buildvorgang wurde am 14.09.2023 21:47:55 gestartet.
+        
+        Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-kgo6lx\\cmTC_d02fa.vcxproj" auf Knoten "1" (Standardziele).
+        PrepareForBuild:
+          Das Verzeichnis "cmTC_d02fa.dir\\Debug\\" wird erstellt.
+          Das Verzeichnis "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-kgo6lx\\Debug\\" wird erstellt.
+          Das Verzeichnis "cmTC_d02fa.dir\\Debug\\cmTC_d02fa.tlog\\" wird erstellt.
+        InitializeBuildStatus:
+          "cmTC_d02fa.dir\\Debug\\cmTC_d02fa.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d02fa.dir\\Debug\\\\" /Fd"cmTC_d02fa.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCCompilerABI.c"
+          Microsoft (R) C/C++-Optimierungscompiler Version 19.36.32532 f\xc2\x81r x64
+          CMakeCCompilerABI.c
+          Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d02fa.dir\\Debug\\\\" /Fd"cmTC_d02fa.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCCompilerABI.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-kgo6lx\\Debug\\cmTC_d02fa.exe" /INCREMENTAL /ILK:"cmTC_d02fa.dir\\Debug\\cmTC_d02fa.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-kgo6lx/Debug/cmTC_d02fa.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-kgo6lx/Debug/cmTC_d02fa.lib" /MACHINE:X64  /machine:x64 cmTC_d02fa.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_d02fa.vcxproj -> C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-kgo6lx\\Debug\\cmTC_d02fa.exe
+        FinalizeBuildStatus:
+          Die Datei "cmTC_d02fa.dir\\Debug\\cmTC_d02fa.tlog\\unsuccessfulbuild" wird gel”scht.
+          Aktualisieren des Timestamps von "cmTC_d02fa.dir\\Debug\\cmTC_d02fa.tlog\\cmTC_d02fa.lastbuildstate".
+        Die Erstellung von Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-kgo6lx\\cmTC_d02fa.vcxproj" ist abgeschlossen (Standardziele).
+        
+        Der Buildvorgang wurde erfolgreich ausgef\xc2\x81hrt.
+            0 Warnung(en)
+            0 Fehler
+        
+        Verstrichene Zeit 00:00:00.76
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-ez7fa9"
+      binary: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-ez7fa9"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-ez7fa9'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_573e9.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Der Buildvorgang wurde am 14.09.2023 21:47:56 gestartet.
+        
+        Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-ez7fa9\\cmTC_573e9.vcxproj" auf Knoten "1" (Standardziele).
+        PrepareForBuild:
+          Das Verzeichnis "cmTC_573e9.dir\\Debug\\" wird erstellt.
+          Das Verzeichnis "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-ez7fa9\\Debug\\" wird erstellt.
+          Das Verzeichnis "cmTC_573e9.dir\\Debug\\cmTC_573e9.tlog\\" wird erstellt.
+        InitializeBuildStatus:
+          "cmTC_573e9.dir\\Debug\\cmTC_573e9.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_573e9.dir\\Debug\\\\" /Fd"cmTC_573e9.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCXXCompilerABI.cpp"
+          Microsoft (R) C/C++-Optimierungscompiler Version 19.36.32532 f\xc2\x81r x64
+          CMakeCXXCompilerABI.cpp
+          Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_573e9.dir\\Debug\\\\" /Fd"cmTC_573e9.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.27\\Modules\\CMakeCXXCompilerABI.cpp"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-ez7fa9\\Debug\\cmTC_573e9.exe" /INCREMENTAL /ILK:"cmTC_573e9.dir\\Debug\\cmTC_573e9.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-ez7fa9/Debug/cmTC_573e9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-ez7fa9/Debug/cmTC_573e9.lib" /MACHINE:X64  /machine:x64 cmTC_573e9.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_573e9.vcxproj -> C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-ez7fa9\\Debug\\cmTC_573e9.exe
+        FinalizeBuildStatus:
+          Die Datei "cmTC_573e9.dir\\Debug\\cmTC_573e9.tlog\\unsuccessfulbuild" wird gel”scht.
+          Aktualisieren des Timestamps von "cmTC_573e9.dir\\Debug\\cmTC_573e9.tlog\\cmTC_573e9.lastbuildstate".
+        Die Erstellung von Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-ez7fa9\\cmTC_573e9.vcxproj" ist abgeschlossen (Standardziele).
+        
+        Der Buildvorgang wurde erfolgreich ausgef\xc2\x81hrt.
+            0 Warnung(en)
+            0 Fehler
+        
+        Verstrichene Zeit 00:00:00.76
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CheckCSourceCompiles.cmake:52 (cmake_check_source_compiles)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindThreads.cmake:97 (CHECK_C_SOURCE_COMPILES)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/VTK-vtk-module-find-packages.cmake:115 (find_package)"
+      - "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/vtk-config.cmake:152 (include)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:267 (find_package)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:316 (find_VTK)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:546 (find_external_library)"
+      - "CMakeLists.txt:3 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-y7q6dd"
+      binary: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-y7q6dd"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/patches/99;C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2;C:/Program Files/PCL 1.13.1/cmake/Modules"
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-y7q6dd'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_68e88.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Der Buildvorgang wurde am 14.09.2023 21:47:57 gestartet.
+        
+        Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\cmTC_68e88.vcxproj" auf Knoten "1" (Standardziele).
+        PrepareForBuild:
+          Das Verzeichnis "cmTC_68e88.dir\\Debug\\" wird erstellt.
+          Das Verzeichnis "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\Debug\\" wird erstellt.
+          Das Verzeichnis "cmTC_68e88.dir\\Debug\\cmTC_68e88.tlog\\" wird erstellt.
+        InitializeBuildStatus:
+          "cmTC_68e88.dir\\Debug\\cmTC_68e88.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_68e88.dir\\Debug\\\\" /Fd"cmTC_68e88.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\src.c"
+          Microsoft (R) C/C++-Optimierungscompiler Version 19.36.32532 f\xc2\x81r x64
+          src.c
+          Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_68e88.dir\\Debug\\\\" /Fd"cmTC_68e88.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\src.c"
+        C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\src.c(1,10): fatal  error C1083: Datei (Include) kann nicht ge”ffnet werden: "pthread.h": No such file or directory [C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\cmTC_68e88.vcxproj]
+        Die Erstellung des Projekts "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\cmTC_68e88.vcxproj" ist abgeschlossen (Standardziele) -- FEHLER.
+        
+        Fehler beim Buildvorgang.
+        
+        "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\cmTC_68e88.vcxproj" (Standardziel) (1) ->
+        (ClCompile Ziel) -> 
+          C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\src.c(1,10): fatal  error C1083: Datei (Include) kann nicht ge”ffnet werden: "pthread.h": No such file or directory [C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-y7q6dd\\cmTC_68e88.vcxproj]
+        
+            0 Warnung(en)
+            1 Fehler
+        
+        Verstrichene Zeit 00:00:00.51
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CheckLibraryExists.cmake:69 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindThreads.cmake:112 (CHECK_LIBRARY_EXISTS)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindThreads.cmake:175 (_threads_check_lib)"
+      - "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/VTK-vtk-module-find-packages.cmake:115 (find_package)"
+      - "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/vtk-config.cmake:152 (include)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:267 (find_package)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:316 (find_VTK)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:546 (find_external_library)"
+      - "CMakeLists.txt:3 (find_package)"
+    checks:
+      - "Looking for pthread_create in pthreads"
+    directories:
+      source: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-h6hx7x"
+      binary: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-h6hx7x"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/patches/99;C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2;C:/Program Files/PCL 1.13.1/cmake/Modules"
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREADS_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-h6hx7x'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_7cea2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Der Buildvorgang wurde am 14.09.2023 21:47:58 gestartet.
+        
+        Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\cmTC_7cea2.vcxproj" auf Knoten "1" (Standardziele).
+        PrepareForBuild:
+          Das Verzeichnis "cmTC_7cea2.dir\\Debug\\" wird erstellt.
+          Das Verzeichnis "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\Debug\\" wird erstellt.
+          Das Verzeichnis "cmTC_7cea2.dir\\Debug\\cmTC_7cea2.tlog\\" wird erstellt.
+        InitializeBuildStatus:
+          "cmTC_7cea2.dir\\Debug\\cmTC_7cea2.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_7cea2.dir\\Debug\\\\" /Fd"cmTC_7cea2.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\CheckFunctionExists.c"
+          Microsoft (R) C/C++-Optimierungscompiler Version 19.36.32532 f\xc2\x81r x64
+          CheckFunctionExists.c
+          Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_7cea2.dir\\Debug\\\\" /Fd"cmTC_7cea2.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\CheckFunctionExists.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\Debug\\cmTC_7cea2.exe" /INCREMENTAL /ILK:"cmTC_7cea2.dir\\Debug\\cmTC_7cea2.ilk" /NOLOGO pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-h6hx7x/Debug/cmTC_7cea2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-h6hx7x/Debug/cmTC_7cea2.lib" /MACHINE:X64  /machine:x64 cmTC_7cea2.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: Datei "pthreads.lib" kann nicht ge”ffnet werden. [C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\cmTC_7cea2.vcxproj]
+        Die Erstellung des Projekts "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\cmTC_7cea2.vcxproj" ist abgeschlossen (Standardziele) -- FEHLER.
+        
+        Fehler beim Buildvorgang.
+        
+        "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\cmTC_7cea2.vcxproj" (Standardziel) (1) ->
+        (Link Ziel) -> 
+          LINK : fatal error LNK1104: Datei "pthreads.lib" kann nicht ge”ffnet werden. [C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-h6hx7x\\cmTC_7cea2.vcxproj]
+        
+            0 Warnung(en)
+            1 Fehler
+        
+        Verstrichene Zeit 00:00:00.65
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/CheckLibraryExists.cmake:69 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindThreads.cmake:112 (CHECK_LIBRARY_EXISTS)"
+      - "C:/Program Files/CMake/share/cmake-3.27/Modules/FindThreads.cmake:176 (_threads_check_lib)"
+      - "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/VTK-vtk-module-find-packages.cmake:115 (find_package)"
+      - "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/vtk-config.cmake:152 (include)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:267 (find_package)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:316 (find_VTK)"
+      - "C:/Program Files/PCL 1.13.1/cmake/PCLConfig.cmake:546 (find_external_library)"
+      - "CMakeLists.txt:3 (find_package)"
+    checks:
+      - "Looking for pthread_create in pthread"
+    directories:
+      source: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-depzjr"
+      binary: "C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-depzjr"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2/patches/99;C:/Program Files/PCL 1.13.1/3rdParty/VTK/lib/cmake/vtk-9.2;C:/Program Files/PCL 1.13.1/cmake/Modules"
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREAD_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-depzjr'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_3b81b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        MSBuild version 17.6.3+07e294721 for .NET Framework
+        Der Buildvorgang wurde am 14.09.2023 21:47:59 gestartet.
+        
+        Projekt "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\cmTC_3b81b.vcxproj" auf Knoten "1" (Standardziele).
+        PrepareForBuild:
+          Das Verzeichnis "cmTC_3b81b.dir\\Debug\\" wird erstellt.
+          Das Verzeichnis "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\Debug\\" wird erstellt.
+          Das Verzeichnis "cmTC_3b81b.dir\\Debug\\cmTC_3b81b.tlog\\" wird erstellt.
+        InitializeBuildStatus:
+          "cmTC_3b81b.dir\\Debug\\cmTC_3b81b.tlog\\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3b81b.dir\\Debug\\\\" /Fd"cmTC_3b81b.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\CheckFunctionExists.c"
+          Microsoft (R) C/C++-Optimierungscompiler Version 19.36.32532 f\xc2\x81r x64
+          CheckFunctionExists.c
+          Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3b81b.dir\\Debug\\\\" /Fd"cmTC_3b81b.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\CheckFunctionExists.c"
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\Debug\\cmTC_3b81b.exe" /INCREMENTAL /ILK:"cmTC_3b81b.dir\\Debug\\cmTC_3b81b.ilk" /NOLOGO pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-depzjr/Debug/cmTC_3b81b.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Johanna/OneDrive - bwedu/Masterarbeit_OSU/Pythonscripts/Masterarbeit_Codes/02_Evaluations/CPPScripts_New/Build/CMakeFiles/CMakeScratch/TryCompile-depzjr/Debug/cmTC_3b81b.lib" /MACHINE:X64  /machine:x64 cmTC_3b81b.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: Datei "pthread.lib" kann nicht ge”ffnet werden. [C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\cmTC_3b81b.vcxproj]
+        Die Erstellung des Projekts "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\cmTC_3b81b.vcxproj" ist abgeschlossen (Standardziele) -- FEHLER.
+        
+        Fehler beim Buildvorgang.
+        
+        "C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\cmTC_3b81b.vcxproj" (Standardziel) (1) ->
+        (Link Ziel) -> 
+          LINK : fatal error LNK1104: Datei "pthread.lib" kann nicht ge”ffnet werden. [C:\\Users\\Johanna\\OneDrive - bwedu\\Masterarbeit_OSU\\Pythonscripts\\Masterarbeit_Codes\\02_Evaluations\\CPPScripts_New\\Build\\CMakeFiles\\CMakeScratch\\TryCompile-depzjr\\cmTC_3b81b.vcxproj]
+        
+            0 Warnung(en)
+            1 Fehler
+        
+        Verstrichene Zeit 00:00:00.66
+        
+      exitCode: 1
+...

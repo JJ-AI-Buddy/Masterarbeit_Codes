@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Pythonscripts\Masterarbeit_Codes\02_Evaluations\CPPScripts_New\Src\NDT_Registration_Eval_ownData_NEW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Pythonscripts\Masterarbeit_Codes\02_Evaluations\CPPScripts_New\Src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{DD9F039A-7BA1-3700-827A-412D644F0FD1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
