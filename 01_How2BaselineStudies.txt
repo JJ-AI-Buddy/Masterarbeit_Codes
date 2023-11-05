@@ -1,0 +1,55 @@
+How to conduct the baseline studies on Moriyama dataset (Autoware open-source, Japan)
+
+Goal: Evaluate the influence of initial pose guess on the performance of established point cloud registration algorithms (ICP, NDT)
+
+Attention: P2Point-ICP and P2Plane-ICP can be implemented in Python with the Open3d library; an NDT implementation is as of now (10/25/2023) only available for C++ with the PCL library
+
+
+### 00_Moriyama_Benchmark_withStepsCombined
+- 1D (x,y,z, pitch, roll or yaw) perturbations, 2D (x and y) perturbations and 3D (x, y and yaw) perturbations of GT pose are implemented
+- Open the python script (recommendation: Spyder) and adjust the inputs at the beginning as needed
+- Only Point-to-Point and Point-to-Plane variants of ICP can be deployed
+- Results (evaluation metrics) and intermediate results of every iteration (for visualization later) are saved in the given directory
+
+### 01_Moriyama_Benchmark_withStepsCombined_GlobalReg
+- Same as above only for a global registration algorithm based an RANSAC (not further used during working on the thesis)
+
+### 02_Moriyama_Benchmark_Visualize
+- Simple visualization of the iterative registration process by using the intermediate results
+
+### 03_Moriyama_Benchmark_Visualize_Modified
+- As visualization above but extended with some descriptions and different form of visualizer of the Open3D library 
+- Hint: Restart kernel if visualization is not working properly
+
+### 04_Moriyama_Benchmark_Visualize_RegResult
+- Displays the registration result statically (source and target point cloud after applying registration algorithm)
+
+### 05_Moriyama_Benchmark_Visualize1D
+- Creates plots for 1D initia pose perturbations
+
+### 06_3DPlots_Moriyama_Benchmark
+- Creates interactive 3D surface plots for the results of 2D initial pose perturbation ( f(dx,dy) )
+
+### 07_4DPlots_Moriyama_Benchmark
+- Creates interactive 4D surface plots for the results of 3D initial pose perturbation ( f(dx,dy,dyaw) )
+
+### 08_Moriyama_Benchmark_Correlation
+- Plots the correlation matrices between input variables and output (evaluation metrics)
+
+
+----- NDT -----------
+
+- Set the inputs for the whole NDT evaluation process in the txt-file:
+	CPPScripts_New/Build/Release/Parameters_NDT_Reg.txt
+- The loop in the source cpp script does not work, so only the first row of the txt-file will be used in each run;
+- After running the program copy the first row of the txt-file and paste it to:
+	CPPScripts_New/Build/Release/Parameters_NDT_Reg_Executed.txt
+- Then delete the first row before starting the program again
+
+- Run the program by double click on:
+	CPPScripts_New/Build/Release/ndt_reg.exe
+
+- Hint: OpenNI2.dll file must be in the same directory for the C++ program to work
+
+- Make changes to inputs in source file if necessary
+	CPPScripts_New/Src/NDT_Registration_Eval.cpp

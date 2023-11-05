@@ -4,7 +4,8 @@ Created on Sat Oct 14 00:38:52 2023
 
 @author: Johanna Hable
 
-Script for validation of the ranking model with different small validation sets
+Script to validate the model with Pointnet++ backbone on different validation sets
+
 """
 
 import torch
@@ -26,7 +27,8 @@ import matplotlib.pyplot as plt
 
 import open3d as o3d
 #from torchsummary import summary
-from progress.bar import IncrementalBar
+#from progress.bar import IncrementalBar
+from pointnet2_utils import PointNetSetAbstractionMsg, PointNetSetAbstraction
 
 def preprocess_input_cloud(pcd,path_pcd,path_plots, save_plot):
 
@@ -91,7 +93,7 @@ def preprocess_input_cloud(pcd,path_pcd,path_plots, save_plot):
     radius_feature = radius_normal * 1.5
     #print("Compute FPFH feature with search radius %.3f. m" % radius_feature)
     
-    pcd_fpfh = o3d.pipelines.registration.compute_fpfh_feature(pcd,
+    pcd_fpfh = o3d.pipelines.registration.compöute_fpfh_feature(pcd,
     o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=100))
     
     sum_fpfh = np.sum(pcd_fpfh.data.T,axis = 0)
@@ -149,6 +151,25 @@ def preprocess_input_cloud(pcd,path_pcd,path_plots, save_plot):
     return input_feature_vector, filename
 
 
+def pc_normalize(pc):
+    #l = pc.shape[0]
+    centroid = np.mean(pc, axis=0)
+    pc = pc - centroid
+    m = np.max(np.sqrt(np.sum(pc**2, axis=1)))
+    pc = pc / m
+    
+    return pc
+
+def subsample(pc, num):
+    num_subset = num
+    num_points = len(pc.points)
+    if num_points > num_subset:
+
+        pc = pc.farthest_point_down_sample(num_subset)
+
+    return pc
+    
+
 device = torch.device("cpu")
 if torch.cuda.is_available():
     device = torch.device("cuda")
@@ -157,49 +178,74 @@ if torch.cuda.is_available():
 validation_area = 'Downtown'
 print_plots = False
 
-path_model_weights = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Results\MLP_PC-Reg_V10_01_bestmodel.pth"
-path_validation = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_Validation\Downtown\prepro"
-path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_Validation\Downtown\Plots"
-path_GT_output = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_Validation\Downtown\Labels_Downtown_Validation.CSV"
-path_results = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_Validation\Downtown\Results\Val_Results_V10_01_Downtown_1-0_0-0_0-0.csv"
+path_model_weights = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Results\MLP_PC-Reg_Pointnet2_pretrained_02_woDropout_6_bestmodel.pth"
+path_validation = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\prepro"
+path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\Plots"
+path_GT_output = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\Labels_Downtown_Validation.CSV"
+path_results = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\Results\Val-Pointnet_Results_01_Downtown_0-5_0-5_0-0.csv"
+path_input_vecs = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\Results\Val-Pointnet_Inputs_01_Downtown.csv"
 
-weights = [1.0,0.0,0.0]
+weights = [0.5,0.5,0.0]
 
 input_size = 33
 num_el = 3
 num_algorithms = 3
 output_size = num_el * num_algorithms
 
-model = nn.Sequential(
-      nn.Linear(input_size, input_size*4),
-      nn.Linear(input_size*4,input_size*5),
-      nn.ReLU(),   
-      #nn.Dropout(0.2),
-      nn.Linear(input_size*5, int(input_size/2)),
-      nn.ReLU(),
-      nn.Linear(int(input_size/2), output_size),
-)
 
-# model = nn.Sequential(
-#      nn.Linear(input_size, input_size*3),
-#      nn.ReLU(),   #nn.ReLU()
-#      nn.Linear(input_size*3,input_size*5),
-#      nn.Dropout(0.5),
-#      nn.Linear(input_size*5, int(input_size/2)),
-#      nn.ReLU(),
-#      nn.Linear(int(input_size/2), output_size),
-# )
+class get_model(nn.Module):
+    def __init__(self,num_class,normal_channel=True):
+        super(get_model, self).__init__()
+        in_channel = 3 if normal_channel else 0
+        self.normal_channel = normal_channel
+        self.sa1 = PointNetSetAbstractionMsg(512, [0.1, 0.2, 0.4], [16, 32, 128], in_channel,[[32, 32, 64], [64, 64, 128], [64, 96, 128]])
+        self.sa2 = PointNetSetAbstractionMsg(128, [0.2, 0.4, 0.8], [32, 64, 128], 320,[[64, 64, 128], [128, 128, 256], [128, 128, 256]])
+        self.sa3 = PointNetSetAbstraction(None, None, None, 640 + 3, [256, 512, 1024], True)
+        self.fc1 = nn.Linear(1024, 512)
+        self.bn1 = nn.BatchNorm1d(512)
+        self.drop1 = nn.Dropout(0.4)
+        self.fc2 = nn.Linear(512, 256)
+        self.bn2 = nn.BatchNorm1d(256)
+        self.drop2 = nn.Dropout(0.5)
+        self.fc3 = nn.Linear(256, num_class)
 
-model.load_state_dict(torch.load(path_model_weights))
-model.eval()
+    def forward(self, xyz):
+        B, _, _ = xyz.shape
+        if self.normal_channel:
+            norm = xyz[:, 3:, :]
+            xyz = xyz[:, :3, :]
+        else:
+            norm = None
+        l1_xyz, l1_points = self.sa1(xyz, norm)
+        l2_xyz, l2_points = self.sa2(l1_xyz, l1_points)
+        l3_xyz, l3_points = self.sa3(l2_xyz, l2_points)
+        x = l3_points.view(B, 1024)
+        #x = F.normalize(x,dim = 0)
+        input_vec = x
+        x = self.drop1(F.relu(self.fc1(x)))   #self.drop1(F.relu(self.bn1(self.fc1(x))))
+        x = self.drop2(F.relu(self.fc2(x)))   #self.drop2(F.relu(self.bn2(self.fc2(x))))
+        x = self.fc3(x)
+        #print(x)
+        #x = F.log_softmax(x, -1)
+
+
+        return x, input_vec
+
+
+model_pretrained = get_model(10,normal_channel = False)
+
+model_pretrained.fc1 = nn.Linear(1024,256)
+model_pretrained.fc2 = nn.Linear(256,64)
+model_pretrained.fc3 = nn.Linear(64,output_size)
+#model_pretrained.fc3 = nn.Linear(256, output_size)
+
+checkpoint = torch.load(path_model_weights)
+model_pretrained.load_state_dict(checkpoint)
+model = model_pretrained.eval()
 
 #Prepare output
 
 data_columns = ['Choice model', 'Choice GT', 'Matching', 'L1 (absolute) loss',
-                'in00','in01','in02','in03', 'in04','in05','in06', 'in07', 'in08', 'in09', 'in10',
-                'in11', 'in12', 'in13', 'in14', 'in15', 'in16', 'in17', 'in18', 'in19', 'in20',
-                'in21', 'in22', 'in23', 'in24', 'in25', 'in26', 'in27', 'in28', 'in29', 'in30',
-                'in31', 'in32',
                 'Pred. P2Point Transl. Error', 'Pred. P2Point Rot. Error', 'Pred. P2Point Number It.', 
                 'Pred. P2Plane Transl. Error', 'Pred. P2Plane Rot. Error', 'Pred. P2Plane Number It.',
                 'Pred. P2Dist Transl. Error', 'Pred. P2Dist Rot. Error', 'Pred. P2Dist Number It.']
@@ -212,7 +258,10 @@ list_match = []
 
 labels = pd.read_csv(path_GT_output, sep = ";", header = 0, index_col = False, encoding='unicode_escape' )
 
-results = np.zeros((len(labels),46))
+results = np.zeros((len(labels),13))
+input_vecs = np.zeros((len(labels),1024))
+
+index = 0
 
 # Validation
 for index in range(0,len(labels)):
@@ -242,22 +291,33 @@ for index in range(0,len(labels)):
     path_pcd = os.path.join(path_validation,filename)
     
     pcd = o3d.io.read_point_cloud(str(path_pcd))
+    
+    point_cloud = subsample(pcd,10000)
+    point_cloud = np.asarray(point_cloud.points)
+    point_cloud = pc_normalize(point_cloud)
+    point_cloud = np.expand_dims(point_cloud,0)
+    #point_cloud = np.asarray(point_cloud.points)
+    point_cloud = torch.from_numpy(point_cloud.astype(np.float32))
+    point_cloud.to(device)
+    point_cloud = point_cloud.permute(0,2,1)
+    
 
-    input_vec, name = preprocess_input_cloud(pcd,path_pcd,path_plots,print_plots)
+    #input_vec, name = preprocess_input_cloud(pcd,path_pcd,path_plots,print_plots)
     #Normalize input vector 0 to 1
-    input_vec[0:33] = (input_vec[0:33]-np.min(input_vec[0:33]))/(np.max(input_vec[0:33])-np.min(input_vec[0:33]))
+    #input_vec[0:33] = (input_vec[0:33]-np.min(input_vec[0:33]))/(np.max(input_vec[0:33])-np.min(input_vec[0:33]))
     #input_vec = input_vec[0:33]
     
     label = labels.iloc[index,4:14].to_numpy(dtype='float')
     #label = np.ones((1,35))
-    input_torch = torch.tensor(input_vec[0:33]).float()
+    #input_torch = torch.tensor(input_vec[0:33]).float()
     label_torch = torch.tensor(label).float()
+    label_torch.to(device)
     
-    prediction = model(input_torch)
+    prediction, input_vec = model(point_cloud)
     
-    loss = F.l1_loss(prediction, label_torch)
+    loss = F.l1_loss(prediction[0], label_torch)
     
-    prediction = prediction.detach().numpy()
+    prediction = prediction.detach().numpy()[0]
     
     list_results[0] = weights[0]*prediction[0] + weights[1]*prediction[1]+weights[2]*prediction[2]
     list_results[1] = weights[0]*prediction[3] + weights[1]*prediction[4]+weights[2]*prediction[5]
@@ -321,17 +381,23 @@ for index in range(0,len(labels)):
     results[index,0] = choice
     results[index,1] = choice_GT
     
+    
+    
     if choice == choice_GT:
         results[index,2] = 1 
     
     results[index,3] = loss
-    results[index,4:37] = input_vec[0:33]
-    results[index,37:46] = prediction
+    results[index,4:13] = prediction
+    
+    input_vecs[index,:] = input_vec.detach().numpy()
 
 df_out = pd.DataFrame(results, columns = data_columns)
+df_inputs = pd.DataFrame(input_vecs)
 
 # Write results to csv file
 df_out.to_csv(path_results,sep = ';',index = False)
+df_inputs.to_csv(path_input_vecs,sep = ';',index = False
+                 )
 
 val = 1
 true_matches = list_match.count(val) 

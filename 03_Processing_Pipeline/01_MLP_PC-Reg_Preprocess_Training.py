@@ -2,7 +2,9 @@
 """
 Created on Fri Oct 13 18:35:21 2023
 
-@author: Johanna
+@author: Johanna Hable
+
+Script to speed up the training of the ranking model; the input feature vector is created for every point cloud of the dataset in advance and saved in a csv file
 """
 
 import torch

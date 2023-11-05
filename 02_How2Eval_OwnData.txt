@@ -1,0 +1,37 @@
+How to evaluate own dataset to obtain the error metrics for training a machine learning model for ranking different point cloud registration algorithms
+
+Hint: It is recommended to use Spyder as IDE because there are some changes to be made to the scripts before running them
+
+### 00_Mapping_OwnData ###
+Is used to build point cloud maps of LiDAR scans and odometry data from a L4-capable vehicle
+
+### 01_OwnData_Preprocess ###
+Is used to preprocess the point clouds and fasten up the evaluation script by already using preprocessed files as input
+
+
+### 02_OwnData_EvalPerformance ###
+Is used to get the error metrics of the registration algorithms that will later be used as labels for training a machine learning model
+Only contains the P2Point and P2Plane ICP algorithm
+
+### 03_OwnData_Visualize_Modified ###
+Is optional; but will give some qualitative insights
+
+
+
+----- NDT ---
+
+
+- Set the inputs for the whole NDT evaluation process in the txt-file:
+	CPPScripts_New/Build/Release/Parameters_NDT_Reg.txt
+- The loop in the source cpp script does not work, so only the first row of the txt-file will be used in each run;
+- After running the program copy the first row of the txt-file and paste it to:
+	CPPScripts_New/Build/Release/Parameters_NDT_Reg_Executed.txt
+- Then delete the first row before starting the program again
+
+- Run the program by double click on:
+	CPPScripts_New/Build/Release/ndt_reg_ownData.exe
+
+- Hint: OpenNI2.dll file must be in the same directory for the C++ program to work
+
+- Make changes to inputs in source file if necessary
+	CPPScripts_New/Src/NDT_Registration_Eval_ownData_NEW.cpp

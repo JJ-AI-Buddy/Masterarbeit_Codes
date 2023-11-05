@@ -2,7 +2,15 @@
 """
 Created on Mon Oct  9 14:45:48 2023
 
-@author: Johanna
+@author: Johanna Hable
+
+Notes:
+    - This file executes the P2Point- and P2Plane-ICP algorithm for an own dataset; similar to the python script of the baseline studies ending in "withStepsCombined"
+    - Only difference: The initial pose will be randomly perturbated in x,y and yaw at the same time
+    - The limits for the delta values that will be added to the GT pose are set with the lists 'lower_limits' and 'upper_limits'
+    - Set the 'ID' value and the 'estimation' and also the desired 'num_runs' which will tell how often the initial pose should be randomly set per selected point cloud
+    - Also set the other input values, like the paths and especially the name of the output files before running this script
+    - The results of this evaluation script will later be used as labes for training a machine learning model; especially the translation/rotation errors as well as the number of iterations
 """
 
 import open3d as o3d

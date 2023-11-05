@@ -1,0 +1,32 @@
+Processing pipeline for point cloud registration algorithm ranking by applying machine learning; prediction of evaluation metrics based on preprocessed input point cloud
+
+### 00_MLP_PC-Reg_Pipeline_Validation ###
+Implementation of an own multi-layer-perceptron (MLP) for predicting the evaluation metrics (translation, rotation error and number of iterations) and then ranking the algorithms based on the weighted sum of the predicted values;
+Validation is performed with the validation dataset (downtown, highway, rural, suburban, urban);
+Input is the handcrafted 1x33 FPFH feature vector;
+
+### 00_MLP_PC-Reg_Pointnet2_Pipeline_Validation ###
+Implementation of the pretrained Pointnet++ for classification with adjustments of the model head (fully connected layers) to predict the same values as the own MLP; The Pointnet++ as backbone for feature extraction is expected to yield better and more accurate results
+
+### 01_MLP_PC-Reg_Preprocess_Training ###
+In this script the input vectors (FPFH feature vectors) are calculated and saved in a csv file for every point cloud in advance; this speeds up the model training procedure significantly
+
+### 01_MLP_PC-Reg_Train ###
+Training script for the own MLP; changes have to be made on this file if different hyperparameters or other parameters are needed
+
+### 01_MLP_PC-Reg_Pointnet_Train ###
+Training script for the modified pretrained Pointnet++ model; - " - 
+
+### 02_Comparison_Input ###
+Script to compare the values of the input vectors of all validation datasets and also the output vectors
+
+### 02_Comparison_Input_Pointnet2 ###
+Script to compare the values of the vector of the Pointnet++ before the fully connected layers (model head) and also the output vectors
+
+### pointnet2_utils ###
+Has to be in the same directory as the Pointnet++ scripts; is needed to import model structures and was copied from the Github repo
+https://github.com/yanx27/Pointnet_Pointnet2_pytorch
+
+
+---- CPPScripts_New ----
+First try was to implement the models in C++ with PCL, but using Python and the pytorch framework was the final personal choice

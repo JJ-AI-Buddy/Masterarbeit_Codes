@@ -2,7 +2,10 @@
 """
 Created on Thu Oct 12 01:31:18 2023
 
-@author: Johanna
+@author: Johanna Hable
+
+
+Script to train an own machine learning model for ranking point cloud registration algorithm according to predicted translation/rotation error and number of iterations by the model given an 1D feature descriptor of the source point cloud
 """
 
 import torch
@@ -31,22 +34,37 @@ device = torch.device("cpu")
 if torch.cuda.is_available():
     device = torch.device("cuda")
 
-input_size = 35
+input_size = 33
 num_el = 3
 num_algorithms = 3
 output_size = num_el * num_algorithms
 
+# model = nn.Sequential(
+#     nn.Linear(input_size, input_size*4),
+#     #nn.ReLU(),   #nn.ReLU()
+#     nn.Linear(input_size*4, input_size*3),
+#     nn.Dropout(0.2),
+#     nn.Linear(input_size*3,input_size*2),
+#     nn.Linear(input_size*2,int(input_size/2)),
+#     nn.ReLU(),
+#     nn.Linear(int(input_size/2), output_size),
+#     nn.Softplus(beta = 1,threshold = 30)
+# )
+
 model = nn.Sequential(
-    nn.Linear(input_size, input_size*2),
-    nn.ReLU(),   #nn.ReLU()
-    nn.Linear(input_size*2, int(input_size/2)),
-    nn.ReLU(),
-    nn.Linear(int(input_size/2), output_size),
+      nn.Linear(input_size, input_size*4),
+      nn.Linear(input_size*4,input_size*5),
+      nn.ReLU(),   
+      #nn.Dropout(0.2),
+      nn.Linear(input_size*5, int(input_size/2)),
+      nn.ReLU(),
+      nn.Linear(int(input_size/2), output_size),
 )
+
 
 model_in_training = model.to(device)
 visualize_training_curve = True
-model_path = 'MLP_PC-Reg_02_bestmodel.pth'
+model_path = 'MLP_PC-Reg_V10_02_bestmodel.pth'
 
 path_dataset = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_02_10162023"
 path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data"
@@ -222,14 +240,18 @@ class PCD_Dataset(torch.utils.data.Dataset):
         idx_csv = self.input_vectors[self.input_vectors['Name']==file].index
         
         input_vector= self.input_vectors.iloc[idx_csv,1:36].to_numpy(dtype = 'float')
+        
+        #Normalize input vector 0 to 1
+        input_vector[0:33] = (input_vector[0:33]-np.min(input_vector[0:33]))/(np.max(input_vector[0:33])-np.min(input_vector[0:33]))
+        #input_vector = input_vector [0:33]
 
         label = self.labels.iloc[index,4:14].to_numpy(dtype='float')
 
         #return image, torch.tensor(label).float()
-        return torch.tensor(input_vector).float(), torch.tensor(label).float()
+        return torch.tensor(input_vector[0,0:33]).float(), torch.tensor(label).float()
 
 
-    
+
 
 
 dataset = PCD_Dataset(annotations_file, path_dataset, csv_file)
@@ -261,7 +283,7 @@ test_loader = torch.utils.data.DataLoader(
 
 
 
-optimizer = optim.Adam(model_in_training.parameters(), lr=0.01) 
+optimizer = optim.SGD(model_in_training.parameters(), lr=0.001) 
 
 pytorch_total_params = sum(p.numel() for p in model_in_training.parameters() if p.requires_grad)
 
@@ -270,7 +292,7 @@ print(pytorch_total_params)
 
 # Training
 since = time.time()
-num_epochs = 20
+num_epochs = 30
 best_loss = 15
 ####################### Creating a txt-File als log-file ############
 
@@ -297,7 +319,7 @@ for epoch in range(num_epochs):
     for inputs,label in iter(train_loader):
         optimizer.zero_grad()
         output = model_in_training(inputs)
-        label = label.unsqueeze(0)
+        #label = label.unsqueeze(0)
         loss = F.l1_loss(output, label) #F.l1_loss(output, label)                   
         train_loss += float(loss)
         loss.backward()
@@ -317,7 +339,7 @@ for epoch in range(num_epochs):
     #bar = IncrementalBar('ChargingBar', max = len(test_dataset))
     for inputs, label in iter(test_loader):
         output = model_in_training(inputs)
-        label = label.unsqueeze(0)
+        #label = label.unsqueeze(0)
         loss = F.l1_loss(output, label) #F.l1_loss(output, label)             
         test_loss += float(loss)
         
@@ -394,6 +416,6 @@ if visualize_training_curve == True:
             horizontalalignment='center', verticalalignment='bottom')
     plt.ylim(0)
     plt.legend(fontsize = 12, draggable = True, facecolor = 'white')
-    save_path = os.path.join(path_plots,"TrainingCurve_Dataset02.pdf")
+    save_path = os.path.join(path_plots,"TrainingCurve_V10_Dataset02.pdf")
     plt.savefig(save_path)
     plt.close()

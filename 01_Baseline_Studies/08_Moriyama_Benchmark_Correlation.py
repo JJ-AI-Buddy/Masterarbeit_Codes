@@ -2,7 +2,7 @@
 """
 Created on Fri Jun 30 13:39:17 2023
 
-@author: Johanna
+@author: Johanna Hable
 
 
 Creates correlation matrix plots for evaluation of the performance of different PC registration algorithms
@@ -25,7 +25,7 @@ all_axes = False
 one_timestamp = False
 all_timestamps = True
 
-NDT = True
+NDT =  True #For NDT not all of the evaluation metric is available
 
 if all_axes == True:
     Idx_axis = -1

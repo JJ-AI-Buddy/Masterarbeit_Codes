@@ -2,12 +2,19 @@
 """
 Created on Sat Jun 10 14:33:39 2023
 
-@author: Johanna
+@author: Johanna Hable
+
+Notes:
+    - This script provides a visualization of the iteration steps during alignment of source and target point cloud of the evaluation results on the own OSU dataset
+    - Compared to the visualization used during baseline studies on Moriyama the initial pose is perturbated in x,y and yaw angle at the same time
+    - Most of the code is similar to the visualization code of the baseline studies 'Visualization_Modified'
 """
 
 import open3d as o3d
 import numpy as np
 import pandas as pd
+import glob
+import os
 import copy
 from scipy.spatial.transform import Rotation as R
 import time
@@ -26,15 +33,16 @@ def save_view_point(pcd, filename):
     
 
 
-path_map = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\01_TRC_Skidpad_Data\01_Map_GPS_TRC_1234.pcd"
-path_GT_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\01_TRC_Skidpad_Data\01_TRC-Skidpad_GT_Poses_Run5.csv"
-path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\01_TRC_Skidpad_Evaluation"
+path_map = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\02_Route_1_Data\FinalMap_Route1.pcd"
+path_scans = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\02_Route_1_Data\pcd_prepro"
+path_GT_csv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\02_Route_1_Data\GT_Poses_OnlineScans_500.csv"
+path_to_file = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\02_Route_1_Evaluation"
 
-path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\01_TRC_Skidpad_Evaluation\C510_RotlIter-ICP_01TRC.csv"
+path_to_ITcsv = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\02_Route_1_Evaluation\D000_Iter_P2Point-ICP_Route01.csv"
 
 Idx_timestamp = 0
-Idx_axis = 0  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
-Idx_init = 1 # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
+#Idx_axis = 0  # 0 - x, 1-y, 2-z, 3-alpha, 4-beta, 5-gamma
+#Idx_init = 1 # Which one of the 17 evaluation points between -2 and 2 or -pi/4 and pi/4
 Value_init = ' -45 °' #If known please add the value as string (value + unit)
 
 #Load GT poses from csv
@@ -42,7 +50,7 @@ df_GT = pd.read_csv(path_GT_csv, delimiter = ',', header = 0)
 
 
 #Save GT position (x,y,z) and orientation as quaternions (x,y,z,w) in numpy array
-arr_GT_poses = df_GT.iloc[:,2::].to_numpy(dtype = 'float')
+arr_GT_poses = df_GT.iloc[:,2:9].to_numpy(dtype = 'float')
 timestamps = df_GT["%time"].values.tolist()
 
 # Choose the GT of the timestamp to be evaluated
@@ -56,17 +64,13 @@ timestamps = df_GT["%time"].values.tolist()
 #    arr_GT_poses[j,:] = np.asarray(df_GT.iloc[i, 4:11])
 #    timestamps.append(df_GT.iloc[i,2])
 #    i += sample_step
-    
-    
-#Point Clouds
-path_map = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Evaluations\01_TRC_Skidpad_Data\01_Map_GPS_TRC_1234.pcd"
-#path_pc_1 = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\PointClouds_Moriyama_140\1427157790678528.pcd"
-#path_pc_2 = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\PointClouds_Moriyama_140\1427157800687781.pcd"
-#path_pc_3 = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\PointClouds_Moriyama_140\1427157810697012.pcd"
-#path_pc_4 = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\PointClouds_Moriyama_140\1427157820706337.pcd"
-#path_pc_5 = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\02_Moriyama_Data\PointClouds_Moriyama_140\1427157830815641.pcd"
 
-list_path_pc = df_GT["pc.timestamp.path"].values.tolist()
+list_path_pc = [] 
+for i in list(glob.glob(path_scans)):
+    path_scan = os.path.join(path_scans,i)
+    list_path_pc.append(str(path_scan))
+
+#list_path_pc = df_GT["pc.timestamp.path"].values.tolist()
 #list_path_pc = [path_pc_1, path_pc_2, path_pc_3, path_pc_4, path_pc_5]
 
 pc_map = o3d.io.read_point_cloud(path_map)  #map point cloud
@@ -118,30 +122,25 @@ df = pd.read_csv(path_to_ITcsv, delimiter = ';', header = 0)
 ## Axis 3,4,5 are for rotation
 
 timestamps = df.groupby('Timestamp').groups.keys()
-axes = df.groupby('Axis').groups.keys()
-init_values = df.groupby('Init Error (Trans or Rot)').groups.keys()
+#axes = df.groupby('Axis').groups.keys()
+#init_values = df.groupby('Init Error (Trans or Rot)').groups.keys()
 
 timestamp_1 = list(timestamps)[Idx_timestamp]
-axis_1 = list(axes)[Idx_axis]
-init_value_1 = list(init_values) [Idx_init]
+#axis_1 = list(axes)[Idx_axis]
+#init_value_1 = list(init_values) [Idx_init]
+
+df = df.loc[df['Timestamp'] == timestamp_1]
+initial_values = str(df.iloc[0,4])
+initial_values = initial_values.split(',')
+
 
 ### Initial transformation matrix
 transl_values = [0,0,0]
 rot_values = [0,0,0]
 
-if axis_1 == 0:
-    transl_values[0] = init_value_1
-elif axis_1 == 1:
-    transl_values[1] = init_value_1
-elif axis_1 == 2:
-    transl_values[2] = init_value_1
-elif axis_1 == 3:
-    rot_values [0] = init_value_1
-elif axis_1 == 4:
-    rot_values [1] = init_value_1
-elif axis_1 == 5:
-    rot_values[2] = init_value_1
-else: print ('Somethin went wrong! Please check.')
+transl_values[0] = float(initial_values[0])   # x
+transl_values[1] = float(initial_values[1]) # y
+rot_values[2] = float(initial_values[2]) # yaw
 
 transform_init = copy.deepcopy(transform_GT)
 R_Euler_init = copy.deepcopy(R_Euler)
@@ -155,12 +154,7 @@ R_matrix_init = r.as_matrix()
 
 transform_init[0:3,0:3] = R_matrix_init
 
-
-df = df.loc[df['Timestamp'] == timestamp_1]
-df = df.loc[df['Axis'] == axis_1]
-df = df.loc[df['Init Error (Trans or Rot)'] == init_value_1]
-
-print('Found %s iteration steps for\nTimestamp number 0, manipulated axis %s with value %s' %(str(len(df)), str(axis_1), str(init_value_1)))
+print('Found %s iteration steps for selected timestamp' %(str(len(df))))
 
 
 i = 0
@@ -184,7 +178,7 @@ ctr = vis.get_view_control()
 
 #Add text
 
-text = "TRC Skidpad \nTimestamp: " + str(Idx_timestamp) + "\nManipulated axis ID: " + str(Idx_axis) + "\nInitial offset: " + str(Value_init) + "\n\nIterations: " + str(len(df))
+text = "Own OSU dataset - Route 1 \nTimestamp: " + str(Idx_timestamp) + "\n\nIterations: " + str(len(df))
 img = Image.new('RGB', (WINDOW_WIDTH, WINDOW_HEIGHT), color = (255,255,255,0))
 font = ImageFont.truetype(r'arial.ttf', 25)
 d = ImageDraw.Draw(img)
@@ -249,7 +243,7 @@ save_image = False
 
 for i in range(0,len(df)):
     
-    t_matrix[0,0] = df.iloc[i,7]
+    t_matrix[0,0] = df.iloc[i,7]       # maybe start at 8 ???
     t_matrix[0,1] = df.iloc[i,8]
     t_matrix[0,2] = df.iloc[i,9]
     t_matrix[0,3] = df.iloc[i,10]

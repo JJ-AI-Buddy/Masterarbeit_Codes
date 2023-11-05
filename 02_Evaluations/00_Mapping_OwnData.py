@@ -2,7 +2,20 @@
 """
 Created on Thu Oct  5 11:02:49 2023
 
-@author: Johanna
+@author: Johanna Hable
+
+Notes:
+    - Always input the directories without quotation marks
+    - Set 'save_map' to 'True' if you want to save the result of any mapping as a point cloud in pcd-file format
+    - Set 'ground_removal' to 'True' if you want the ground of the scans to be removed for the maps
+    - Set 'create_runs' to 'True' if you want to create the map for a specific run of a specific route and follow the input instructions; else set the variable to 'False'
+    - Set 'create_final' to 'True' if you want to combine the maps of several runs in one combined map and follow the input instructions; else set the variable to 'False'
+    - Set 'load_online_scans' to 'True' if you want to load online scans from a run not used to build the map; these scans will then be seen as the online scans for applying the point cloud registration (matching online scan and map)
+    - The result of 'load_online_scans' will be a csv-file listing the selected scans with their corresponding path and the GT poses from odometry
+    - Do not change the variable 'hz_diff'
+    - The variable 'step' is adjustable; depending on how many scans you want to use to build your map
+    - The variable 'step_online' defines in which intervall the online scans will be selected if 'load_online_scans' is 'True'
+    - The variable 'static_offset' is used to adjust the origin of the map point cloud; it is the same for Route_1, Route_2 and Route_3 and different for Route_4 because the starting point of data collection was not at CAR
 """
 
 import open3d as o3d 

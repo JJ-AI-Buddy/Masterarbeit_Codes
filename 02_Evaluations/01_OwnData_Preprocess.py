@@ -2,7 +2,16 @@
 """
 Created on Tue Oct 10 14:34:08 2023
 
-@author: Johanna
+@author: Johanna Hable
+
+Notes:
+    - This script was created to speed up the evaluation script
+    - Preprocessing of the point clouds was slowing down the evaluation script remarkably
+    - For that reason, the point clouds are preprocessed and saved in a new directory before being used as input for the evaluation
+    - Performed preprocessing steps are voxel-based downsampling and ground removal
+    - Please set 'save_scan' to 'True' if you want the point clouds to be saved in a new directory
+    - Also give beginning of the scan names, e.g 'Route_1_Scan_' or for the validation dataset 'Suburban_Scan_'
+    - If you are preprocessing the validation dataset, set 'validation_set' to 'True'; else the variable should be 'False'
 """
 
 import open3d as o3d 
@@ -85,13 +94,6 @@ for x in range(0,len(list_path_pc)):
         print("Preprocessed point cloud has been saved successfully!\n\n")
     else:
         print("Saving of new point cloud failed!\n\n")
-    
-#Visualization
-# o3d.visualization.draw_geometries([pcd],
-#                                   zoom=1.34,
-#                                   front=[0.4257, -0.2125, -0.8795],
-#                                   lookat= [0.0,0.0,0.0], 
-#                                   up=[-0.0694, -0.9768, 0.2024])
 
 
 
