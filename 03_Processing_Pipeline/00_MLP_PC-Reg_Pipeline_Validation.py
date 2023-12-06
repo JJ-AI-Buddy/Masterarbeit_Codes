@@ -154,16 +154,19 @@ if torch.cuda.is_available():
     device = torch.device("cuda")
 
 
-validation_area = 'Downtown'
+validation_area = 'Urban'
 print_plots = False
 
-path_model_weights = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Results\MLP_PC-Reg_V10_01_bestmodel.pth"
-path_validation = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_Validation\Downtown\prepro"
-path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_Validation\Downtown\Plots"
-path_GT_output = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_Validation\Downtown\Labels_Downtown_Validation.CSV"
-path_results = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data\Dataset_Validation\Downtown\Results\Val_Results_V10_01_Downtown_1-0_0-0_0-0.csv"
+path_model_weights = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Results\Own_Model\MLP_PC-Reg_V10_02_bestmodel.pth"
+path_validation = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\prepro"
+path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Plots"
+path_GT_output = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Labels_Urban_Validation.CSV"
 
-weights = [1.0,0.0,0.0]
+path_results = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Results\Val_Results_V10_02_Urban_1-0_1-0_1-0.csv"
+path_errors = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Results\Val_Errors_V10_02_Urban_1-0_1-0_1-0.csv"
+
+
+weights = [1.0,1.0,1.0]
 
 input_size = 33
 num_el = 3
@@ -213,6 +216,7 @@ list_match = []
 labels = pd.read_csv(path_GT_output, sep = ";", header = 0, index_col = False, encoding='unicode_escape' )
 
 results = np.zeros((len(labels),46))
+errors = np.zeros((len(labels),12))
 
 # Validation
 for index in range(0,len(labels)):
@@ -242,15 +246,24 @@ for index in range(0,len(labels)):
     path_pcd = os.path.join(path_validation,filename)
     
     pcd = o3d.io.read_point_cloud(str(path_pcd))
+    
+    start = time.time()
 
     input_vec, name = preprocess_input_cloud(pcd,path_pcd,path_plots,print_plots)
     #Normalize input vector 0 to 1
     input_vec[0:33] = (input_vec[0:33]-np.min(input_vec[0:33]))/(np.max(input_vec[0:33])-np.min(input_vec[0:33]))
     #input_vec = input_vec[0:33]
     
+    input_torch = torch.tensor(input_vec[0:33]).float()
+    
+    prediction = model(input_torch)
+    
+    end = time.time()
+    print("Model execution took %f s" %(end-start))
+    
     label = labels.iloc[index,4:14].to_numpy(dtype='float')
     #label = np.ones((1,35))
-    input_torch = torch.tensor(input_vec[0:33]).float()
+
     label_torch = torch.tensor(label).float()
     
     prediction = model(input_torch)
@@ -263,7 +276,7 @@ for index in range(0,len(labels)):
     list_results[1] = weights[0]*prediction[3] + weights[1]*prediction[4]+weights[2]*prediction[5]
     list_results[2] = weights[0]*prediction[6] + weights[1]*prediction[7]+weights[2]*prediction[8]
     
-    list_errors = prediction - label
+    list_errors = abs(prediction - label)
     choice = list_results.index(min(list_results))
     
     # Ground Truth
@@ -320,6 +333,10 @@ for index in range(0,len(labels)):
             
     results[index,0] = choice
     results[index,1] = choice_GT
+    errors[index,0] = choice
+    errors[index,1] = choice_GT
+    errors[index,2] = loss
+    errors[index,3::]= list_errors
     
     if choice == choice_GT:
         results[index,2] = 1 
@@ -332,6 +349,13 @@ df_out = pd.DataFrame(results, columns = data_columns)
 
 # Write results to csv file
 df_out.to_csv(path_results,sep = ';',index = False)
+
+error_columns = ['model ranking', 'GT ranking', 'L1 loss']
+error_columns.extend(labels.columns[4::])
+
+df_errors = pd.DataFrame(errors, columns = error_columns)
+
+df_errors.to_csv(path_errors, sep = ';', index = False)
 
 val = 1
 true_matches = list_match.count(val) 

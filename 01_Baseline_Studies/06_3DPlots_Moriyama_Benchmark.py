@@ -21,11 +21,11 @@ pio.renderers.default='browser'   #'browser'
 
 ######################################### Set input ############
 ### Choose file with x2x name
-path_to_eval = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\C123_TranslXYBaselineICPMoriyama.csv"
+path_to_eval = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\04_Baseline\03_Moriyama_Evaluation\C023_TranslXYBaselineICPMoriyama.csv"
 ### Choose which timestamp to evaluate
-Idx_timestamp = 3
+Idx_timestamp = 1
 ### Choose if transl. error or rotation error should be displayed
-bool_rot = True
+bool_rot = False
 
 ##############################################################
 
@@ -45,6 +45,20 @@ else:
 data = pd.read_csv(path_to_eval, delimiter = ';', header = 0, engine = 'python', encoding= 'unicode_escape', )
 
 data = data.fillna(0.0)
+data.columns
+
+i = 0
+for i in range(0,len(data)):
+    if data['Initial Rot. Error 2 [°]'].iloc[i] > 300:
+        data['Initial Rot. Error 2 [°]'].iloc[i] = 360 - data['Initial Rot. Error 2 [°]'].iloc[i]
+     
+    ### only for NDT:
+    elif data['Initial Rot. Error 2 [°]'].iloc[i] == 180:
+        data['Initial Rot. Error 2 [°]'].iloc[i] = 180 - data['Initial Rot. Error 2 [°]'].iloc[i]
+
+    if data['Rot. Error 2 [°]'].iloc[i] > 300:
+        data['Rot. Error 2 [°]'].iloc[i] = 360 - data['Rot. Error 2 [°]'].iloc[i]
+
 
 timestamps = data.groupby('Timestamp GT Pose').groups.keys()
 first_axis = data.groupby('Initial Transl x').groups.keys()
@@ -61,8 +75,8 @@ for i in range(0, len(list(first_axis))):
     df.reset_index()
     for j in range(0,len(df)):
         z_data[0,i,j] = df.iloc[j]["Transl. Error [m]"] - df.iloc[j]["Initial Transl. Error [m]"]
-        z_data[1,i,j] = df.iloc[j]["Rot. Error 1 [°]"] - df.iloc[j]["Initial Rot. Error 1 [°]"]
-        z_data[2,i,j] = df.iloc[j]["RMSE Inliers"]
+        z_data[1,i,j] = df.iloc[j]["Rot. Error 2 [°]"] - df.iloc[j]["Initial Rot. Error 2 [°]"]
+       # z_data[2,i,j] = df.iloc[j]["RMSE Inliers"]
  
 
 z1 = z_data[0]

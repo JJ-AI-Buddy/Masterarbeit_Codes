@@ -25,8 +25,8 @@ io.renderers.default='svg'
 
 
 ######################### INPUT/SETTINGS #####################################################
-Idx_timestamp = 3
-Idx_axis = 1 #0 = x, 1 = y, 2 = z
+Idx_timestamp = 1
+Idx_axis = 0 #0 = x, 1 = y, 2 = z
 
 # Your choice
 one_axis = True
@@ -36,10 +36,10 @@ all_timestamps = False
 max_y_value_transl = 2.5
 max_y_axis_transl = 3
 
-max_y_value_rotl = 30
-max_y_axis_rotl = 35
+max_y_value_rotl = 50
+max_y_axis_rotl = 55
 
-offset = 1          # Offset for green arrow on the left - rotl = 1; transl = 0.1
+offset = 2         # Offset for green arrow on the left - rotl = 10; transl = 0.1
 
 #if all_axes == True:
 #    Idx_axis = -1
@@ -50,15 +50,15 @@ if all_timestamps == True:
 else: one_timestamp = True
 
 
-file_name = "\C203_TranslBaselineNDTMoriyama.csv"       #File name must be given with a backslash in front: "\xxxx"
+file_name = "\C213_RotlBaselineNDTMoriyama.csv"       #File name must be given with a backslash in front: "\xxxx"
 title = "Evaluation of 1D initial pose perturbation on Moriyama Dataset\n - Timestamp ID: " + str(Idx_timestamp) + ", Axis ID: " + str(Idx_axis)
-name = '1D_C103_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
+name = '1D-2_C213_' + str(Idx_timestamp) + '_' + str(Idx_axis) + '.pdf'
 
 #######################################################################################################################
 
-path_origin = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation"
+path_origin = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\04_Baseline\03_Moriyama_Evaluation"
 path = path_origin + file_name
-path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\Baseline\03_Moriyama_Evaluation\Plots1D_Python"
+path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\04_Baseline\03_Moriyama_Evaluation\Plots1D_Python"
 
 #Load GT poses from csv
 df = pd.read_csv(path, delimiter = ';', header = 0, engine = 'python', encoding = 'unicode_escape')
@@ -110,8 +110,8 @@ else: pass
 
 if all_timestamps == True:
     #Calculate average values over all timestamps
-    feature_list = ['Timestamp GT Pose','Number Iterations', 'Execut. Time [s]', 'Rot. Error 1 [°]', 'Initial Rot. Error 1 [°]',
-                 'GNSS Transl. Error[m]', 'GNSS Rot. Error 1 [°]', 'Initial Transl. Error [m]', 'Transl. Error [m]' ]
+    feature_list = ['Timestamp GT Pose','Number Iterations', 'Execut. Time [s]', 'Rot. Error 2 [°]', 'Initial Rot. Error 2 [°]',
+                 'GNSS Transl. Error[m]', 'GNSS Rot. Error 2 [°]', 'Initial Transl. Error [m]', 'Transl. Error [m]' ]
     df_new = df[feature_list]
     
     mean_execut = np.mean(df_new['Execut. Time [s]'] / df_new['Number Iterations'])*1000 
@@ -127,14 +127,14 @@ if all_timestamps == True:
     #Check if angle is >90° and subtract 180°
     df_new = df_new.reset_index()
     k= 0
-    for k in range(0,len(df_new['Initial Rot. Error 1 [°]'])):
-        if df_new.loc[:,'Initial Rot. Error 1 [°]'][k]>= 90:
-            df_new.loc[:,'Initial Rot. Error 1 [°]'][k] = abs(df_new.loc[:,'Initial Rot. Error 1 [°]'][k]- 180)
+    for k in range(0,len(df_new['Initial Rot. Error 2 [°]'])):
+        if df_new.loc[:,'Initial Rot. Error 2 [°]'][k]>= 90:
+            df_new.loc[:,'Initial Rot. Error 2 [°]'][k] = abs(df_new.loc[:,'Initial Rot. Error 2 [°]'][k]- 180)
     
     k= 0
-    for k in range(0,len(df_new['Rot. Error 1 [°]'])):
-        if df_new.loc[:,'Rot. Error 1 [°]'][k]>= 90:
-            df_new.loc[:,'Rot. Error 1 [°]'][k] = abs(df_new.loc[:,'Rot. Error 1 [°]'][k]- 180)
+    for k in range(0,len(df_new['Rot. Error 2 [°]'])):
+        if df_new.loc[:,'Rot. Error 2 [°]'][k]>= 90:
+            df_new.loc[:,'Rot. Error 2 [°]'][k] = abs(df_new.loc[:,'Rot. Error 2 [°]'][k]- 180)
             
     df_mean = pd.DataFrame(0, index=np.arange(17), columns=feature_list)
     df_dev = pd.DataFrame(0, index=np.arange(17), columns=feature_list)
@@ -233,7 +233,7 @@ if transl == True:
     
     #Handling out-of-range data of the rotation error curve
     x_out = []
-    ls_data = list(df_data['Rot. Error 1 [°]'])
+    ls_data = list(df_data['Rot. Error 2 [°]'])
 
     for i in range(len(ls_data)):
         if ls_data[i] > max_y_value_transl:
@@ -391,6 +391,19 @@ if transl == True:
     
 if rotl == True:
     
+    i = 0
+    for i in range(0,len(df_data)):
+        if df_data['Initial Rot. Error 2 [°]'].iloc[i] > 300:
+            df_data['Initial Rot. Error 2 [°]'].iloc[i] = 360 - df_data['Initial Rot. Error 2 [°]'].iloc[i]
+         
+        ### only for NDT:
+        elif df_data['Initial Rot. Error 2 [°]'].iloc[i] == 180:
+            df_data['Initial Rot. Error 2 [°]'].iloc[i] = 180 - df_data['Initial Rot. Error 2 [°]'].iloc[i]
+    
+        if df_data['Rot. Error 2 [°]'].iloc[i] > 300:
+            df_data['Rot. Error 2 [°]'].iloc[i] = 360 - df_data['Rot. Error 2 [°]'].iloc[i]
+    
+    
     x_out = []
     ls_data = list(df_data['Transl. Error [m]'])
 
@@ -407,7 +420,7 @@ if rotl == True:
                              name = 'Handling: Outlier of Translation Error',
                              #line = dict(width = 2, color = 'orange'),
                              #marker = dict(color = 'blue', symbol = 'arrow-up', size = 15),
-                             text = ">30",
+                             text = ">50",
                              #textposition="top right",
                              showarrow = True,
                              font=dict(
@@ -443,7 +456,7 @@ if rotl == True:
     
     #Add curve for GNSS Rotation error
     fig.add_trace(go.Scatter (x=df.iloc[:,3],
-                              y=df_data['GNSS Rot. Error 1 [°]'], 
+                              y=df_data['GNSS Rot. Error 2 [°]'], 
                               mode = 'lines',
                               name = 'GNSS Rotation Error in °',
                               line = dict(width = 3, color = 'black', dash = 'dot')
@@ -452,21 +465,21 @@ if rotl == True:
     
     
     #Check if angle is >90° and subtract 180°
-    df_data = df_data.reset_index()
-    k= 0
-    for k in range(0,len(df_data['Initial Rot. Error 1 [°]'])):
-        if df_data.loc[:,'Initial Rot. Error 1 [°]'][k]>= 90:
-            df_data.loc[:,'Initial Rot. Error 1 [°]'][k] = abs(df_data.loc[:,'Initial Rot. Error 1 [°]'][k]- 180)
+    # df_data = df_data.reset_index()
+    # k= 0
+    # for k in range(0,len(df_data['Initial Rot. Error 2 [°]'])):
+    #     if df_data.loc[:,'Initial Rot. Error 2 [°]'][k]>= 90:
+    #         df_data.loc[:,'Initial Rot. Error 2 [°]'][k] = abs(df_data.loc[:,'Initial Rot. Error 2 [°]'][k]- 180)
     
-    k= 0
-    for k in range(0,len(df_data['Rot. Error 1 [°]'])):
-        if df_data.loc[:,'Rot. Error 1 [°]'][k]>= 90:
-            df_data.loc[:,'Rot. Error 1 [°]'][k] = abs(df_data.loc[:,'Rot. Error 1 [°]'][k]- 180)
+    # k= 0
+    # for k in range(0,len(df_data['Rot. Error 2 [°]'])):
+    #     if df_data.loc[:,'Rot. Error 2 [°]'][k]>= 90:
+    #         df_data.loc[:,'Rot. Error 2 [°]'][k] = abs(df_data.loc[:,'Rot. Error 2 [°]'][k]- 180)
     
     
     #Add markers for initial perturbation
     fig.add_trace(go.Scatter (x=df.iloc[:,Idx_axis+3],
-                          y=df_data['Initial Rot. Error 1 [°]'],
+                          y=df_data['Initial Rot. Error 2 [°]'],
                           mode = 'markers',
                           name = 'Initial Rotation Error in °' ,
                           marker = dict(color = 'black', symbol = 'hourglass', size = 9)
@@ -476,7 +489,7 @@ if rotl == True:
 
     #Add bars for induced error of the intial pose
     fig.add_trace(go.Bar (x=df.iloc[:,Idx_axis+3],
-                      y=df_data['Initial Rot. Error 1 [°]'],
+                      y=df_data['Initial Rot. Error 2 [°]'],
                       name = 'Test',
                       marker=dict(color = 'lightgrey',
                      #colorscale='viridis' ,#name = 'Percentual change of translation offset'
@@ -485,21 +498,22 @@ if rotl == True:
                      ),
                      showlegend = False)
             )
+    
 
     x_out = []
-    ls_delta = list(df_data['Rot. Error 1 [°]']- df_data['Initial Rot. Error 1 [°]'])
+    ls_delta = list(df_data['Rot. Error 2 [°]']- df_data['Initial Rot. Error 2 [°]'])
 
     for i in range(len(ls_delta)):
-        if ls_delta[i] > max_y_value_rotl-list(df_data.loc[:,'Initial Rot. Error 1 [°]'])[i]:
+        if ls_delta[i] > max_y_value_rotl-list(df_data.loc[:,'Initial Rot. Error 2 [°]'])[i]:
             x_out.append(i)
             
-            ls_delta[i] = max_y_value_rotl-list(df_data.loc[:,'Initial Rot. Error 1 [°]'])[i]
+            ls_delta[i] = max_y_value_rotl-list(df_data.loc[:,'Initial Rot. Error 2 [°]'])[i]
 
     for outlier in x_out: 
         fig.add_annotation(x= df.iloc[outlier,Idx_axis+3],
                              y=max_y_value_rotl,
                              name = 'Handling: Outlier of delta of rotation error',
-                             text = ">30",
+                             text = ">50",
                              showarrow = True,
                              font=dict(
                                  family="Arial",
@@ -526,8 +540,8 @@ if rotl == True:
     fig.add_trace(go.Bar (x=df.iloc[:,Idx_axis+3],
                       y=ls_delta,
                       name = 'Delta Rotation Error in °',
-                      base = df_data['Initial Rot. Error 1 [°]'],
-                      marker=dict(color =df_data['Rot. Error 1 [°]']- df_data['Initial Rot. Error 1 [°]'], #df['Rot. Error 1 [°]'],
+                      base = df_data['Initial Rot. Error 2 [°]'],
+                      marker=dict(color =df_data['Rot. Error 2 [°]']- df_data['Initial Rot. Error 2 [°]'], #df['Rot. Error 1 [°]'],
                                   colorscale=[[0, 'red'], [1.0, 'blue']] ,
                      #name = 'Percentual change of translation offset'
                      #range_color = [0,df['Rot. Error 1 [°]'].max()],
@@ -548,11 +562,11 @@ if rotl == True:
     if all_timestamps == True:
         #Add error bars
         fig.add_trace(go.Scatter(x=df.iloc[:,Idx_axis+3],
-                             y=df_data['Rot. Error 1 [°]'],
+                             y=df_data['Rot. Error 2 [°]'],
                              name = 'Standard deviation Rotation Error in °',
                              error_y=dict(type='data', 
                                           symmetric=True, 
-                                          array=df_dev['Rot. Error 1 [°]'], 
+                                          array=df_dev['Rot. Error 2 [°]'], 
                                           #arrayminus=df_min['Transl. Error [m]']
                                           ),
                              marker = dict(color = 'darkslategray', symbol = 'line-ew-open', size = 10,
@@ -639,5 +653,5 @@ fig.update_layout(font=dict(size=11 ),
 #fig.update_yaxes(range=[None, max_y_value], rangebreaks = [enabled = False, name = 'Test'])
 #fig.update_traces(selector={"name": "Rotation Error in °"},cliponaxis = True)
 #fig.update_yaxes(rangebreaks=[dict(enabled = False)])
-#fig.write_image(os.path.join(path_plots,name))
+fig.write_image(os.path.join(path_plots,name))
 fig.show()

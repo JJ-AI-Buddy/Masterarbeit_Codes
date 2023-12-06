@@ -175,17 +175,20 @@ if torch.cuda.is_available():
     device = torch.device("cuda")
 
 
-validation_area = 'Downtown'
+validation_area = 'Urban'
 print_plots = False
 
-path_model_weights = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Results\MLP_PC-Reg_Pointnet2_pretrained_02_woDropout_6_bestmodel.pth"
-path_validation = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\prepro"
-path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\Plots"
-path_GT_output = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\Labels_Downtown_Validation.CSV"
-path_results = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\Results\Val-Pointnet_Results_01_Downtown_0-5_0-5_0-0.csv"
-path_input_vecs = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Downtown\Results\Val-Pointnet_Inputs_01_Downtown.csv"
+path_model_weights = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Results\Pointnet2_Own_Model\MLP_PC-Reg_Pointnet2_pretrained_V6_02_bestmodel.pth"
+path_validation = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\prepro"
+path_plots = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Plots"
+path_GT_output = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Labels_Urban_Validation.CSV"
+path_results = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Results\Val-Pointnet_Results_02_Urban_1-0_1-0_1-0.csv"
+path_input_vecs = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Results\Val-Pointnet_Inputs_02_Urban.csv"
 
-weights = [0.5,0.5,0.0]
+path_errors = r"C:\Users\Johanna\OneDrive - bwedu\Masterarbeit_OSU\05_Data_Training\Dataset_Validation\Urban\Results\Val-Pointnet_Errors_02_Urban_1-0_1-0_1-0.csv"
+
+
+weights = [1.0,1.0,1.0]
 
 input_size = 33
 num_el = 3
@@ -260,6 +263,7 @@ labels = pd.read_csv(path_GT_output, sep = ";", header = 0, index_col = False, e
 
 results = np.zeros((len(labels),13))
 input_vecs = np.zeros((len(labels),1024))
+errors = np.zeros((len(labels),12))
 
 index = 0
 
@@ -292,6 +296,7 @@ for index in range(0,len(labels)):
     
     pcd = o3d.io.read_point_cloud(str(path_pcd))
     
+    start = time.time()
     point_cloud = subsample(pcd,10000)
     point_cloud = np.asarray(point_cloud.points)
     point_cloud = pc_normalize(point_cloud)
@@ -301,6 +306,13 @@ for index in range(0,len(labels)):
     point_cloud.to(device)
     point_cloud = point_cloud.permute(0,2,1)
     
+    start = time.time()
+
+    prediction, input_vec = model(point_cloud)
+    
+    end = time.time()
+    
+    print("Model execution took %f s" %(end-start))
 
     #input_vec, name = preprocess_input_cloud(pcd,path_pcd,path_plots,print_plots)
     #Normalize input vector 0 to 1
@@ -312,8 +324,7 @@ for index in range(0,len(labels)):
     #input_torch = torch.tensor(input_vec[0:33]).float()
     label_torch = torch.tensor(label).float()
     label_torch.to(device)
-    
-    prediction, input_vec = model(point_cloud)
+
     
     loss = F.l1_loss(prediction[0], label_torch)
     
@@ -323,7 +334,7 @@ for index in range(0,len(labels)):
     list_results[1] = weights[0]*prediction[3] + weights[1]*prediction[4]+weights[2]*prediction[5]
     list_results[2] = weights[0]*prediction[6] + weights[1]*prediction[7]+weights[2]*prediction[8]
     
-    list_errors = prediction - label
+    list_errors = abs(prediction - label)
     choice = list_results.index(min(list_results))
     
     # Ground Truth
@@ -380,6 +391,10 @@ for index in range(0,len(labels)):
             
     results[index,0] = choice
     results[index,1] = choice_GT
+    errors[index,0] = choice 
+    errors[index,1] = choice_GT
+    errors[index,2] = loss
+    errors[index,3::] = list_errors
     
     
     
@@ -398,6 +413,13 @@ df_inputs = pd.DataFrame(input_vecs)
 df_out.to_csv(path_results,sep = ';',index = False)
 df_inputs.to_csv(path_input_vecs,sep = ';',index = False
                  )
+
+error_columns = ['model ranking', 'GT ranking', 'L1 loss']
+error_columns.extend(labels.columns[4::])
+
+df_errors = pd.DataFrame(errors, columns = error_columns)
+
+df_errors.to_csv(path_errors, sep = ';', index = False)
 
 val = 1
 true_matches = list_match.count(val) 
